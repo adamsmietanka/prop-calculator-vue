@@ -3,6 +3,7 @@ from forms import TextForm, RadioForm, TypeDataForm
 from calc import PropellerVariable, PropellerFixed
 from flask_bootstrap import Bootstrap
 import os
+from .commands import create_tables
 
 from models import db
 
@@ -10,6 +11,8 @@ app = Flask(__name__)
 Bootstrap(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 db.init_app(app)
+
+app.cli.add_command(create_tables)
 
 
 @app.route('/', methods=['POST', 'GET'])
