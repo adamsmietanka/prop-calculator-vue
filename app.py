@@ -2,12 +2,13 @@ from flask import Flask, render_template, request
 from forms import TextForm, RadioForm, TypeDataForm
 from calc import PropellerVariable, PropellerFixed
 from flask_bootstrap import Bootstrap
+import os
 
 from models import db
 
 app = Flask(__name__)
 Bootstrap(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 db.init_app(app)
 
 
