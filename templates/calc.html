@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="content">
+    <h1>Propeller Efficiency Calculator</h1>
+
+    <div class="layout-container">
+        <div class="form-column">
+            <form action="/" method="POST" enctype="multipart/form-data">
+
+                {% for field in text %}
+                    {{ field.label }}<br>
+                    {{ field(class_="form-control") }}<br>
+                {% endfor %}
+
+                {% for field in radio %}
+                    <div class="list-group">
+                        {{ field.label }}
+                        {{ field }}
+                    </div>
+                {% endfor %}
+
+                <div id="power-coefficient-input" class="{{'hidden-input' if radio.blade_type.data == 'fix'}}">
+                    {{ type_data.Cp.label }}<br>
+                    {{ type_data.Cp(class_="form-control") }}<br>
+                </div>
+
+                <div id="angle-input" class="{{'hidden-input' if radio.blade_type.data == 'var'}}">
+                    {{ type_data.angle.label }}<br>
+                    {{ type_data.angle(class_="form-control") }}<br>
+                </div>
+                <input type=submit value=Update class="btn btn-primary">
+            </form>
+        </div>
+        <div class="pitch-column">
+            <div class="table">
+                {{ table|safe }}
+            </div>
+        </div>
+        <div class="pitch-column">
+            <div class="chart" id="scatter1"></div>
+            <div class="chart" id="scatter2"></div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script>
+
+        {% for fig, fig_id in figs %}
+            graph = {{fig | safe}};
+            Plotly.plot({{ fig_id }}, graph, {});
+        {% endfor %}
+
+        $(function hideInput() {
+            $('input:radio[name="blade_type"]').change(function() {
+                if ($(this).val() == 'var') {
+                    $('#angle-input').css("display", "none");
+                    $('#power-coefficient-input').css("display", "block");
+                } else {
+                    $('#power-coefficient-input').css("display", "none");
+                    $('#angle-input').css("display", "block");
+                }
+            });
+        });
+    </script>
+{% endblock %}

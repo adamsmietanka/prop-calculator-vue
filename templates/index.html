@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="content">
+    <h1>Propeller Efficiency Calculator</h1>
+
+    <div class="layout-container">
+        <div class="form-column">
+            <form action="/" method="POST">
+
+                {% for field in text %}
+                    {{ field.label }}<br>
+                    {{ field(class_="form-control") }}<br>
+                {% endfor %}
+
+                {% for field in radio %}
+                    <div class="list-group">
+                        {{ field.label }}
+                        {{ field }}
+                    </div>
+                {% endfor %}
+
+                <div id="power-coefficient-input" class="{{'hidden-input' if radio.blade_type.data == 'fix'}}">
+                    {{ type_data.Cp.label }}<br>
+                    {{ type_data.Cp(class_="form-control") }}<br>
+                </div>
+
+                <div id="angle-input" class="{{'hidden-input' if radio.blade_type.data == 'var'}}">
+                    {{ type_data.angle.label }}<br>
+                    {{ type_data.angle(class_="form-control") }}<br>
+                </div>
+                <input type=submit value=Compute class="btn btn-primary">
+            </form>
+        </div>
+        <div class="pitch-column">
+            <h3>Easy to use!</h3>
+            <p>Definitely easier than your old Casio. And it has charts.</p>
+            <h3>No more wasted time!</h3>
+            <p>The best companion for everyone studying Mechanics of Flight.</p>
+            <h3>Blazing fast!</h3>
+            <p>Don't wait. Just try it.</p>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script>
+        $(function() {
+            $('input:radio[name="blade_type"]').change(function() {
+                if ($(this).val() == 'var') {
+                    $('#angle-input').hide();
+                    $('#power-coefficient-input').show();
+                } else {
+                    $('#power-coefficient-input').hide();
+                    $('#angle-input').show();
+                }
+            });
+        });
+    </script>
+{% endblock %}
