@@ -3,7 +3,7 @@ from forms import TextForm, RadioForm, TypeDataForm
 from calc import PropellerVariable, PropellerFixed
 from flask_bootstrap import Bootstrap
 import os
-from .commands import create_tables
+from commands import create_tables
 
 from models import db
 
