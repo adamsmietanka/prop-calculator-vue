@@ -21,7 +21,7 @@ def index():
     text_inputs = TextForm(request.form)
     radio_inputs = RadioForm(request.form)
     if request.method == 'POST':
-        if text_inputs.validate() and type_data.validate() and radio_inputs.blades.data in [2, 3, 4]:
+        if text_inputs.validate() and type_data.validate() and radio_inputs.blades.data in ['2', '3', '4']:
             if radio_inputs.blade_type.data == 'var':
                 prop = PropellerVariable(text=text_inputs,
                                          radio=radio_inputs,
