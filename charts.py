@@ -39,10 +39,6 @@ class Chart:
         return layout
 
     def draw(self):
-        if self.cp is not None:
-            points_z = np.repeat(self.cp, len(self.points))
-        else:
-            points_z = self.points.Eff
         trace1 = go.Scatter3d(
             x=self.original['x'],
             y=self.original['y'],
@@ -64,6 +60,7 @@ class Chart:
             ),
             name='Extrapolated',
         )
+        points_z = self.get_points_z()
         trace3 = go.Scatter3d(
             x=self.points.J,
             y=self.points.Angle,
@@ -75,3 +72,11 @@ class Chart:
         fig = go.Figure(data=[trace1, trace2, trace3], layout=layout)
         graph_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
         return graph_json
+
+    def get_points_z(self):
+        if self.series_name is 'Angle':
+            return np.repeat(self.cp, len(self.points))
+        elif self.series_name is 'Cp':
+            return self.points.Cp
+        else:
+            return self.points.Eff

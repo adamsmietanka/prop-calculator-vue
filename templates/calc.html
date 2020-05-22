@@ -29,6 +29,11 @@
                     {{ type_data.angle.label }}<br>
                     {{ type_data.angle(class_="form-control") }}<br>
                 </div>
+
+                <div id="speed-input" class="{{'hidden-input' if radio.blade_type.data == 'var'}}">
+                    {{ type_data.v_cruise.label }}<br>
+                    {{ type_data.v_cruise(class_="form-control") }}<br>
+                </div>
                 <input type=submit value=Update class="btn btn-primary">
             </form>
         </div>
@@ -58,10 +63,12 @@
             $('input:radio[name="blade_type"]').change(function() {
                 if ($(this).val() == 'var') {
                     $('#angle-input').css("display", "none");
+                    $('#speed-input').css("display", "none");
                     $('#power-coefficient-input').css("display", "block");
                 } else {
-                    $('#power-coefficient-input').css("display", "none");
                     $('#angle-input').css("display", "block");
+                    $('#speed-input').css("display", "block");
+                    $('#power-coefficient-input').css("display", "none");
                 }
             });
         });

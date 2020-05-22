@@ -10,6 +10,9 @@ class TypeDataForm(Form):
     angle = FloatField(
         label='Propeller pitch (°)', default=30,
         validators=[DataRequired(), NumberRange(15, 50)])
+    v_cruise = FloatField(
+        label='Cruise speed (m/s)', default=100,
+        validators=[DataRequired(), NumberRange(0, 300)])
 
 
 class TextForm(Form):

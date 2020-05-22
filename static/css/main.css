@@ -34,6 +34,9 @@ table {
 #power-coefficient-input {
     margin-bottom: 10px;
 }
+#speed-input {
+    margin-bottom: 10px;
+}
 
 .hidden-input {
     display: none;

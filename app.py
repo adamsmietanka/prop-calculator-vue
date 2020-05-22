@@ -26,12 +26,11 @@ def index():
                 prop = PropellerVariable(text=text_inputs,
                                          radio=radio_inputs,
                                          type_data=type_data)
-                figs = [(prop.draw_eff(), 'scatter1'), (prop.draw_angle(), 'scatter2')]
             else:
                 prop = PropellerFixed(text=text_inputs,
                                       radio=radio_inputs,
                                       type_data=type_data)
-                figs = [(prop.draw_eff(), 'scatter1')]
+            figs = [(prop.draw_eff(), 'scatter1'), (prop.draw_angle(), 'scatter2')]
             return render_template('calc.html',
                                    table=prop.data.to_html(classes=['table', 'table-striped'], header="true"),
                                    type_data=type_data,
