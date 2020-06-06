@@ -8,26 +8,31 @@
         <div class="form-column">
             <form action="/" method="POST">
 
-                {% for field in text %}
+                {% for field in inputs.text %}
                     {{ field.label }}<br>
                     {{ field(class_="form-control") }}<br>
                 {% endfor %}
 
-                {% for field in radio %}
+                {% for field in inputs.radio %}
                     <div class="list-group">
                         {{ field.label }}
                         {{ field }}
                     </div>
                 {% endfor %}
 
-                <div id="power-coefficient-input" class="{{'hidden-input' if radio.blade_type.data == 'fix'}}">
-                    {{ type_data.Cp.label }}<br>
-                    {{ type_data.Cp(class_="form-control") }}<br>
+                <div id="power-coefficient-input" class="{{'hidden-input' if inputs.radio.blade_type.data == 'fix'}}">
+                    {{ inputs.specs.Cp.label }}<br>
+                    {{ inputs.specs.Cp(class_="form-control") }}<br>
                 </div>
 
-                <div id="angle-input" class="{{'hidden-input' if radio.blade_type.data == 'var'}}">
-                    {{ type_data.angle.label }}<br>
-                    {{ type_data.angle(class_="form-control") }}<br>
+                <div id="angle-input" class="{{'hidden-input' if inputs.radio.blade_type.data == 'var'}}">
+                    {{ inputs.specs.angle.label }}<br>
+                    {{ inputs.specs.angle(class_="form-control") }}<br>
+                </div>
+
+                <div id="speed-input" class="{{'hidden-input' if inputs.radio.blade_type.data == 'var'}}">
+                    {{ inputs.specs.v_cruise.label }}<br>
+                    {{ inputs.specs.v_cruise(class_="form-control") }}<br>
                 </div>
                 <input type=submit value=Compute class="btn btn-primary">
             </form>
@@ -47,10 +52,12 @@
             $('input:radio[name="blade_type"]').change(function() {
                 if ($(this).val() == 'var') {
                     $('#angle-input').hide();
+                    $('#speed-input').hide();
                     $('#power-coefficient-input').show();
                 } else {
-                    $('#power-coefficient-input').hide();
                     $('#angle-input').show();
+                    $('#speed-input').show();
+                    $('#power-coefficient-input').hide();
                 }
             });
         });

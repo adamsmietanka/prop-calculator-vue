@@ -1,18 +1,5 @@
-# from wtforms.fields.html5 import DecimalField
 from wtforms import Form, RadioField, FloatField
 from wtforms.validators import DataRequired, NumberRange
-
-
-class TypeDataForm(Form):
-    Cp = FloatField(
-        label='Coefficient of power (-)', default=0.1,
-        validators=[DataRequired(), NumberRange(0.05, 0.3)])
-    angle = FloatField(
-        label='Propeller pitch (°)', default=30,
-        validators=[DataRequired(), NumberRange(15, 50)])
-    v_cruise = FloatField(
-        label='Cruise speed (m/s)', default=100,
-        validators=[DataRequired(), NumberRange(0, 300)])
 
 
 class TextForm(Form):
@@ -25,7 +12,7 @@ class TextForm(Form):
     v_eng = FloatField(
         label='Engine speed (1/s)', default=50,
         validators=[DataRequired(), NumberRange(0, 200)])
-    reduction_ratio = FloatField(
+    ratio = FloatField(
         label='Gear reduction ratio (-)', default=0.5,
         validators=[DataRequired(), NumberRange(0, 2)])
     diameter = FloatField(
@@ -40,4 +27,16 @@ class RadioForm(Form):
     blade_type = RadioField(label='Blade pitch',
                             choices=[('var', 'Variable'), ('fix', 'Fixed')],
                             default='var')
+
+
+class SpecsForm(Form):
+    Cp = FloatField(
+        label='Coefficient of power (-)', default=0.1,
+        validators=[DataRequired(), NumberRange(0.05, 0.3)])
+    angle = FloatField(
+        label='Blade angle (°)', default=30,
+        validators=[DataRequired(), NumberRange(15, 50)])
+    v_cruise = FloatField(
+        label='Cruise speed (m/s)', default=100,
+        validators=[DataRequired(), NumberRange(0, 300)])
 

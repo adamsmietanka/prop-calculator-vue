@@ -1,23 +1,24 @@
 import pandas as pd
 import numpy as np
+
 from scipy.interpolate import griddata
 
 from charts import Chart
 from models import PropellerMesh
 
 
-class Propeller:
+class Prop:
 
-    def __init__(self, text, radio, type_data):
-        self.v_max = int(text.v_max.data)
-        self.v_delta = int(text.v_delta.data)
-        self.v_eng = text.v_eng.data
-        self.ratio = text.reduction_ratio.data
-        self.diameter = text.diameter.data
-        self.blades_number = radio.blades.data
-        self.angle = float(type_data.angle.data)
-        self.cp = type_data.Cp.data
-        self.v_cruise = type_data.v_cruise.data
+    def __init__(self, inputs):
+        self.v_max = int(inputs['text'].v_max.data)
+        self.v_delta = int(inputs['text'].v_delta.data)
+        self.v_eng = inputs['text'].v_eng.data
+        self.ratio = inputs['text'].ratio.data
+        self.diameter = inputs['text'].diameter.data
+        self.blades_number = inputs['radio'].blades.data
+        self.angle = float(inputs['specs'].angle.data)
+        self.cp = inputs['specs'].Cp.data
+        self.v_cruise = inputs['specs'].v_cruise.data
         self.min = self.get_mesh()
         self.data = self.prepare_data()
         self.calculate()
@@ -61,7 +62,7 @@ class Propeller:
         return chart.draw()
 
 
-class PropellerVariable(Propeller):
+class PropVariable(Prop):
 
     def calculate(self):
         self.interpolate_angle()
@@ -73,7 +74,7 @@ class PropellerVariable(Propeller):
         return chart.draw()
 
 
-class PropellerFixed(Propeller):
+class PropFixed(Prop):
 
     def calculate(self):
         j_cruise = self.v_cruise / (self.ratio * self.v_eng * self.diameter)
@@ -81,7 +82,7 @@ class PropellerFixed(Propeller):
         self.interpolate_cp()
         self.interpolate_eff()
         self.data['J/Jo'] = np.round(self.data.J / j_cruise, 3)
-        self.data['n/no'] = np.round((cp_cruise / self.data.Cp) ** (1/2), 3)
+        self.data['n/no'] = np.round((cp_cruise / self.data.Cp) ** 0.5, 3)
         self.data['V_new'] = np.round(self.v_cruise * self.data['J/Jo'] * self.data['n/no'], 1)
 
     def calculate_cp(self, adv_ratio):

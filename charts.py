@@ -1,7 +1,7 @@
+import json
 import numpy as np
 import plotly
 import plotly.graph_objects as go
-import json
 
 
 class Chart:
@@ -20,7 +20,7 @@ class Chart:
         layout = go.Layout(
             scene=dict(
                 xaxis_title='J',
-                yaxis_title='Pitch',
+                yaxis_title='Angle',
                 zaxis_title=self.z_title),
             height=400,
             width=500,
@@ -44,6 +44,7 @@ class Chart:
             y=self.original['y'],
             z=self.original[self.z_col],
             mode='markers',
+            opacity=0.7,
             marker=dict(
                 size=5,
             ),
@@ -66,6 +67,9 @@ class Chart:
             y=self.points.Angle,
             z=points_z,
             mode='markers',
+            marker=dict(
+                size=5,
+            ),
             name=self.series_name
         )
         layout = self.get_layout()

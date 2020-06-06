@@ -1,52 +1,40 @@
-from flask import Flask, render_template, request, flash
-from forms import TextForm, RadioForm, TypeDataForm
-from calc import PropellerVariable, PropellerFixed
-from flask_bootstrap import Bootstrap
 import os
-from commands import create_tables
 
+from flask import Flask, render_template, request
+from flask_bootstrap import Bootstrap
+
+from forms import TextForm, RadioForm, SpecsForm
+from calc import PropVariable, PropFixed
+from commands import create_tables
 from models import db
 
 app = Flask(__name__)
 Bootstrap(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
-db.init_app(app)
 
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 app.cli.add_command(create_tables)
+
+db.init_app(app)
 
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
-    type_data = TypeDataForm(request.form)
-    text_inputs = TextForm(request.form)
-    radio_inputs = RadioForm(request.form)
+    text = TextForm(request.form)
+    radio = RadioForm(request.form)
+    specs = SpecsForm(request.form)
+    inputs = {'text': text, 'radio': radio, 'specs': specs}
     if request.method == 'POST':
-        if text_inputs.validate() and type_data.validate() and radio_inputs.blades.data in ['2', '3', '4']:
-            if radio_inputs.blade_type.data == 'var':
-                prop = PropellerVariable(text=text_inputs,
-                                         radio=radio_inputs,
-                                         type_data=type_data)
-            else:
-                prop = PropellerFixed(text=text_inputs,
-                                      radio=radio_inputs,
-                                      type_data=type_data)
-            figs = [(prop.draw_eff(), 'scatter1'), (prop.draw_angle(), 'scatter2')]
+        if text.validate() and specs.validate() and radio.blades.data in ['2', '3', '4']:
+            prop = PropVariable(inputs) if radio.blade_type.data == 'var' else PropFixed(inputs)
+            figs = [prop.draw_eff(), prop.draw_angle()]
             return render_template('calc.html',
                                    table=prop.data.to_html(classes=['table', 'table-striped'], header="true"),
-                                   type_data=type_data,
-                                   text=text_inputs,
-                                   radio=radio_inputs,
+                                   inputs=inputs,
                                    figs=figs)
-        else:
-            return render_template('error.html',
-                                   type_data=type_data,
-                                   text=text_inputs,
-                                   radio=radio_inputs)
-    else:
-        return render_template('index.html',
-                               type_data=type_data,
-                               text=text_inputs,
-                               radio=radio_inputs)
+        return render_template('error.html',
+                               inputs=inputs)
+    return render_template('index.html',
+                           inputs=inputs)
 
 
 if __name__ == '__main__':
