@@ -1,20 +1,22 @@
-import json
 import numpy as np
-import plotly
 import plotly.graph_objects as go
 
 
+# noinspection PyAttributeOutsideInit
 class Chart:
 
     def __init__(self, minified, points, cp,  z_col, z_title, series_name):
-        clean_data = minified[~((minified.x > 0.5) & (minified.z_eff == 0))]
-        self.original = clean_data[clean_data.y.isin([15, 20, 25, 30, 35, 40, 45])]
-        self.new_data = clean_data[~clean_data.y.isin([15, 20, 25, 30, 35, 40, 45])]
+        self.prepare_data(minified)
         self.points = points
         self.cp = cp
         self.z_col = z_col
         self.z_title = z_title
         self.series_name = series_name
+
+    def prepare_data(self, df):
+        clean_df = df[~((df.x > 0.5) & (df.z_eff == 0))]
+        self.original = clean_df[clean_df.y.isin([15, 20, 25, 30, 35, 40, 45])]
+        self.new_data = clean_df[~clean_df.y.isin([15, 20, 25, 30, 35, 40, 45])]
 
     def get_layout(self):
         layout = go.Layout(
@@ -61,11 +63,10 @@ class Chart:
             ),
             name='Extrapolated',
         )
-        points_z = self.get_points_z()
         trace3 = go.Scatter3d(
             x=self.points.J,
             y=self.points.Angle,
-            z=points_z,
+            z=self.get_points_z(),
             mode='markers',
             marker=dict(
                 size=5,
@@ -74,13 +75,11 @@ class Chart:
         )
         layout = self.get_layout()
         fig = go.Figure(data=[trace1, trace2, trace3], layout=layout)
-        graph_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
-        return graph_json
+        return fig
 
     def get_points_z(self):
         if self.series_name is 'Angle':
             return np.repeat(self.cp, len(self.points))
         elif self.series_name is 'Cp':
             return self.points.Cp
-        else:
-            return self.points.Eff
+        return self.points.Eff

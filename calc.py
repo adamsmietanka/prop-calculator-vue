@@ -1,5 +1,7 @@
 import pandas as pd
 import numpy as np
+import plotly
+import json
 
 from scipy.interpolate import griddata
 
@@ -7,7 +9,7 @@ from charts import Chart
 from models import PropellerMesh
 
 
-class Prop:
+class _Prop:
 
     def __init__(self, inputs):
         self.v_max = int(inputs['text'].v_max.data)
@@ -61,8 +63,15 @@ class Prop:
                       z_col='z_eff', z_title='Eff', series_name='Efficiency')
         return chart.draw()
 
+    def get_data(self):
+        chart1 = self.draw_eff()
+        chart2 = self.draw_angle()
+        table = self.data.to_json(orient='records')
+        data = json.dumps({"1": chart1, "2": chart2, "table": {}}, cls=plotly.utils.PlotlyJSONEncoder)
+        return data.replace('{}', table)
 
-class PropVariable(Prop):
+
+class PropVariable(_Prop):
 
     def calculate(self):
         self.interpolate_angle()
@@ -70,11 +79,11 @@ class PropVariable(Prop):
 
     def draw_angle(self):
         chart = Chart(minified=self.min, points=self.data, cp=self.cp,
-                      z_col='z_angle', z_title='Power', series_name='Angle')
+                      z_col='z_angle', z_title='Cp', series_name='Angle')
         return chart.draw()
 
 
-class PropFixed(Prop):
+class PropFixed(_Prop):
 
     def calculate(self):
         j_cruise = self.v_cruise / (self.ratio * self.v_eng * self.diameter)
@@ -94,5 +103,6 @@ class PropFixed(Prop):
 
     def draw_angle(self):
         chart = Chart(minified=self.min, points=self.data, cp=self.data.Cp,
-                      z_col='z_angle', z_title='Power', series_name='Cp')
+                      z_col='z_angle', z_title='Cp', series_name='Cp')
         return chart.draw()
+
