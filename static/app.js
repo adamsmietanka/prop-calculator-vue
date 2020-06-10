@@ -8,7 +8,6 @@ submit.click(function(event){
 });
 
 function draw_charts(data) {
-    // console.log(data);
     let graph1 = data['1'];
     let graph2 = data['2'];
     if (submit.val() === 'Update') {
