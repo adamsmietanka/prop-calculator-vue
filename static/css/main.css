@@ -1,31 +1,10 @@
-h1, h2 {
-    text-align: center;
-}
 .content {
-    margin: 0 auto;
-    width: 90%;
+    margin: 30px;
 }
 table, td, th {
     border: 1px solid #aaa;
     text-align: center;
     padding: 0px;
-}
-.layout-container {
-    display: flex;
-}
-.text-column {
-    margin: 20px;
-}
-.table-column, .pitch-column {
-    flex: 1;
-    margin: 20px;
-}
-.form-column {
-    margin: 10px 100px 20px 20px;
-}
-
-.hidden-input {
-    display: none;
 }
 
 /*RADIO BUTTONS*/

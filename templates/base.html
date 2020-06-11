@@ -9,27 +9,29 @@
             <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 
         {% block styles %}
-            <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 
-            <!-- Bootstrap CSS -->
+            <!-- Bootstrap & Font Awesome CSS -->
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
+            <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css" type='text/css'>
+
+            <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
         {% endblock %}
 
             <title>Propeller Calculator</title>
         {% endblock %}
     </head>
     <body>
-        <!-- Your page content -->
         {% block content %}{% endblock %}
 
         {% block scripts %}
             <!-- Optional JavaScript -->
-
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
 
             <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
             <script src="{{ url_for('static', filename='app.js') }}"></script>
+            <script src="{{ url_for('static', filename='prop.js') }}"></script>
         {% endblock %}
     </body>
-</html></html>
+</html>

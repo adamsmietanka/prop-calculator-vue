@@ -1,11 +1,33 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+        <a href="#" class="navbar-brand"><i class="fa fa-plane"></i> Prop Calculator</a>
+        <button class="navbar-toggler" data-toggle="collapse" data-target="#navbar-menu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbar-menu">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a href="#" class="nav-link">Engine</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">Propeller</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
     <div class="content">
-        <h1>Propeller Efficiency Calculator</h1>
-
-        <div class="layout-container">
-            <div class="form-column">
+        <div class="row" id="prop-tab">
+            <div class="col-lg-10 order-lg-12" id="landing">
+                <h3>Easy to use!</h3>
+                <p>Definitely easier than your old Casio. And it has charts.</p>
+                <h3>No more wasted time!</h3>
+                <p>The best companion for everyone studying Mechanics of Flight.</p>
+                <h3>Blazing fast!</h3>
+                <p>Don't wait. Just try it.</p>
+            </div>
+            <div class="col-lg-2 order-lg-1" id="prop-form-col">
                 <form id="prop-form" enctype="multipart/form-data">
                     <div>
                         {% for field in inputs.text %}
@@ -20,21 +42,21 @@
                             </div>
                         {% endfor %}
 
-                        <div id="power-coefficient-input" class="{{'hidden-input' if inputs.radio.blade_type.data == 'fix'}}">
-                            {{ inputs.specs.Cp.label }}<br>
-                            {{ inputs.specs.Cp(class_="form-control") }}<br>
+                        <div id="power-coefficient-input" class="{{'collapse' if inputs.radio.blade_type.data == 'fix'}}">
+                            {{ inputs.specs.Cp.label }}
+                            {{ inputs.specs.Cp(class_="form-group form-control") }}
                         </div>
 
-                        <div id="angle-input" class="{{'hidden-input' if inputs.radio.blade_type.data == 'var'}}">
-                            {{ inputs.specs.angle.label }}<br>
-                            {{ inputs.specs.angle(class_="form-control") }}<br>
+                        <div id="angle-input" class="{{'collapse' if inputs.radio.blade_type.data == 'var'}}">
+                            {{ inputs.specs.angle.label }}
+                            {{ inputs.specs.angle(class_="form-group form-control") }}
                         </div>
 
-                        <div id="speed-input" class="{{'hidden-input' if inputs.radio.blade_type.data == 'var'}}">
-                            {{ inputs.specs.v_cruise.label }}<br>
-                            {{ inputs.specs.v_cruise(class_="form-control") }}<br>
+                        <div id="speed-input" class="{{'collapse' if inputs.radio.blade_type.data == 'var'}}">
+                            {{ inputs.specs.v_cruise.label }}
+                            {{ inputs.specs.v_cruise(class_="form-group form-control") }}
                         </div>
-                        <input type=submit value=Compute class="btn btn-primary" id="prop-submit">
+                        <input type=submit value=Compute class="btn btn-primary btn-block" id="prop-submit">
                     </div>
 
 
@@ -48,20 +70,17 @@
                     </div>
                 </div>
             </div>
-            <div class="text-column">
-                <h3>Easy to use!</h3>
-                <p>Definitely easier than your old Casio. And it has charts.</p>
-                <h3>No more wasted time!</h3>
-                <p>The best companion for everyone studying Mechanics of Flight.</p>
-                <h3>Blazing fast!</h3>
-                <p>Don't wait. Just try it.</p>
-            </div>
-            <div class="table-column">
-                <table class="table table-bordered table-striped"></table>
-            </div>
-            <div class="pitch-column">
-                <div class="chart" id="chart1"></div>
-                <div class="chart" id="chart2"></div>
+            <div class="row col-lg-10 pl-lg-100 order-3 collapse" id="prop-data">
+                <div class="row">
+                    <div class="col-lg">
+                        <table class="table table-bordered table-striped" id="prop-table"></table>
+                    </div>
+                    <div class="col-lg">
+                        <div id="chart1"></div>
+                        <div id="chart2"></div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
