@@ -1,4 +1,4 @@
-const submit = $('#prop-submit');
+const $submit = $('#prop-submit');
 
 function draw_charts(graphs) {
     if ($('#chart1').html() === '') {
@@ -53,7 +53,7 @@ function send_form(formData) {
         processData: false,
         contentType: false,
         success: (data) => {
-            submit.val('Update');
+            $submit.val('Update');
             if (data.hasOwnProperty("error"))
                 $('.toast').toast('show');
             else {
@@ -67,9 +67,11 @@ function send_form(formData) {
     });
 }
 
-submit.on('click', (event) => {
-    submit.val('Computing...');
+$submit.on('click', (event) => {
+    $submit.val('Computing...');
     let formData = new FormData(document.querySelector('#prop-form'));
+
+    console.log(formData);
 
     send_form(formData);
     event.preventDefault();

@@ -1,4 +1,12 @@
+$('a#engine-link').on('click', () => {
+    $('#prop-tab').hide();
+    $('#engine-tab').show();
+});
 
+$('a#prop-link').on('click', () => {
+    $('#engine-tab').hide();
+    $('#prop-tab').show();
+});
 
 $(function hideInput() {
     $('input:radio[name="blade_type"]').on('change',function() {
