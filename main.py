@@ -2,6 +2,7 @@ import os
 
 from flask import Flask, render_template, request, jsonify
 from flask_bootstrap import Bootstrap
+from flask_cors import CORS
 
 from forms import TextForm, RadioForm, SpecsForm
 from calc import PropVariable, PropFixed
@@ -10,6 +11,7 @@ from models import db
 
 app = Flask(__name__)
 Bootstrap(app)
+CORS(app, resources={r'/*': {'origins': '*'}})
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False

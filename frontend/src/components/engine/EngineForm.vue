@@ -1,139 +1,142 @@
 <template>
-  <div class="engine-form">
-    <FormulateForm
-    >
-      <FormulateInput
-        name="SLPower"
-        label="SL Power"
-        :value="form.SLPower"
-        @change="setSLPower($event)"
-        validation="required|number|min:0|max:10000"
-      />
-      <FormulateInput
-        label="K coefficient"
-        type="range"
-        name="k"
-        min="0.08"
-        max="0.25"
-        step="0.01"
-        :value="form.k"
-        @change="setK($event)"
-        show-value="true"
-        validation="required|min:0.08|max:0.25"
-      />
-      <FormulateInput
-        label="Engine type"
-        type="radio"
-        name="engineType"
-        :options="{
-        piston: 'Piston',
-        turbine: 'Turbine'}"
-        validation="required"
-      />
-      <FormulateInput
-        v-show="form.engineType === 'piston'"
-        type="group"
-        name="supercharger"
-        :repeatable="true"
-        limit="2"
-        default="0"
-        label="Supercharger"
-        add-label="+ Add supercharger stage"
-        validation="required"
-      >
-        <div class="supercharger">
-          <FormulateInput
-            name="startAlt"
-            validation="required|number|min:0|max:10"
-            label="Start altitude"
-          />
-          <FormulateInput
-            name="endAlt"
-            validation="required|number|min:0|max:10"
-            label="End altitude"
-          />
-          <FormulateInput
-            name="endPower"
-            validation="required|number|min:0|max:10000"
-            label="End power"
-          />
-        </div>
-      </FormulateInput>
-      <FormulateInput
-        v-show="form.engineType === 'piston'"
-        type="group"
-        name="turbocharger"
-        :repeatable="true"
-        limit="1"
-        label="Turbocharger"
-        add-label="+ Add turbocharger"
-        validation="required"
-      >
-        <div class="turbocharger">
-          <FormulateInput
-            name="turboAltitude"
-            validation="required"
-            label="Constant power altitude"
-          />
-        </div>
-      </FormulateInput>
-    </FormulateForm>
+  <div class="engine-form mt-2">
+    <b-form-group label="SL Power">
+      <ValidationProvider name="SL Power"
+                          rules="required|min_value:100|max_value:10000" v-slot="{ errors, valid }">
+        <b-input-group append="kW">
+          <b-form-input type="number"
+                        v-model="SLPower"
+                        @keyup="valid && setSLPower($event)"
+                        @click="valid && setSLPower($event)"
+                        :state="valid ? null : false"
+                        aria-describedby="error"/>
+        </b-input-group>
+        <b-form-invalid-feedback id="error">{{ errors[0] }}</b-form-invalid-feedback>
+      </ValidationProvider>
+    </b-form-group>
+    <b-form-group label="K coefficient">
+      <b-input-group :append="form.k">
+        <b-form-input type="range" v-model="kCoefficient" min="0.08" max="0.25" step="0.01"/>
+      </b-input-group>
+    </b-form-group>
+    <b-form-group label="Max altitude">
+      <b-input-group :append="maxAltUnits">
+        <b-form-input type="range" v-model="maxAltitude" min="10" max="15"/>
+      </b-input-group>
+    </b-form-group>
+    <b-form-group label="Engine type">
+      <b-form-radio-group v-model="engineType" stacked >
+        <b-form-radio value="piston">Piston</b-form-radio>
+        <b-form-radio value="turbine">Turbine</b-form-radio>
+      </b-form-radio-group>
+    </b-form-group>
+    <b-form-group label="Supercharger" v-show="engineType === 'piston'">
+      <b-card bg-variant="light" class="mb-2">
+        <b-form-group label="Stage 1"/>
+        <b-form-group label-cols="4" label-size="sm" label="Start altitude:" >
+          <ValidationProvider rules="required|min_value:0|max_value:10" v-slot="{ errors, valid }">
+            <b-input-group size="sm" append="km">
+              <b-form-input type="number"
+                            fieldName=""
+                            size="sm"
+                            v-model="SLPower"
+                            @keyup="valid && setSLPower($event)"
+                            @click="valid && setSLPower($event)"
+                            :state="valid && null"
+                            aria-describedby="error"/>
+            </b-input-group>
+            <b-form-invalid-feedback id="error">{{ errors[0] }}</b-form-invalid-feedback>
+          </ValidationProvider>
+        </b-form-group>
+        <b-form-group label-cols="4" label-size="sm" label="End altitude:" >
+          <ValidationProvider rules="required|min_value:0|max_value:10" v-slot="{ errors, valid }">
+            <b-input-group size="sm" append="km">
+              <b-form-input type="number"
+                            fieldName=""
+                            size="sm"
+                            v-model="SLPower"
+                            @keyup="valid && setSLPower($event)"
+                            @click="valid && setSLPower($event)"
+                            :state="valid && null"
+                            aria-describedby="error"/>
+            </b-input-group>
+            <b-form-invalid-feedback id="error">{{ errors[0] }}</b-form-invalid-feedback>
+          </ValidationProvider>
+        </b-form-group>
+      </b-card>
+      <b-button pill v-if="stages < 3" variant="secondary" @click="addStage">Add stage</b-button>
+      <b-button pill v-if="stages > 0" variant="danger" @click="removeStage">Remove stage</b-button>
+    </b-form-group>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 
 export default {
   name: 'EngineForm',
+  data() {
+    return {
+      SLPower: 100,
+      supercharger: [
+        {
+          startAlt: 0,
+          endAlt: 3,
+          endPwr: 150,
+        },
+      ],
+    };
+  },
+  created() {
+    this.SLPower = this.form.SLPower;
+  },
   computed: {
     ...mapState({ form: (state) => state.engine.form }),
+    ...mapGetters(['maxAltUnits', 'stages']),
+    kCoefficient: {
+      get() { return this.form.k; },
+      set(v) { this.$store.dispatch('setK', v); },
+    },
+    maxAltitude: {
+      get() { return this.form.maxAltitude; },
+      set(v) { this.$store.dispatch('setMaxAlt', v); },
+    },
+    engineType: {
+      get() { return this.form.engineType; },
+      set(v) { this.$store.dispatch('setEngineType', v); },
+    },
   },
   methods: {
-    setK(e) {
-      this.$store.commit('SET_K', e.target.value);
-    },
     setSLPower(e) {
-      console.log(1);
-      this.$store.commit('SET_SL_POWER', e.target.value);
+      this.$store.dispatch('setSLPower', e.target.value);
     },
+    addStage() {
+      this.form.supercharger.push({
+        startAlt: 0,
+        endAlt: 3,
+        endPwr: 150,
+      });
+    },
+    removeStage() { this.form.supercharger.pop(); },
   },
 };
 </script>
 
 <style lang="scss">
-@import '../../../node_modules/@braid/vue-formulate/themes/snow/snow.scss';
-
-.engine-form {
-  padding: 1.5em;
-  box-sizing: border-box;
-}
-@media (min-width: 650px) {
-  .supercharger {
-    display: flex;
-  }
+.input-group > .custom-range {
+  border: none;
+  margin-left: -10px;
 }
 
-@media (min-width: 720px) {
-  .supercharger {
-    display: block;
-  }
+.input-group-append {
+  margin-left: 0px;
 }
 
-@media (min-width: 850px) {
-  .supercharger {
-    display: flex;
-  }
-  .supercharger .formulate-input {
-    margin-right: 1.5em;
-  }
-}
-.supercharger .formulate-input {
-  margin-right: 1.5em;
-  margin-bottom: 0;
+.invalid-feedback {
+  display: block;
 }
 
-  .formulate-input-group-add-more {
-    border: none;
-  }
+button {
+  margin-right: 10px;
+}
 </style>
