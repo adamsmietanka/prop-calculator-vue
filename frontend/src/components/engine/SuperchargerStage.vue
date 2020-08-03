@@ -1,0 +1,124 @@
+<template>
+<b-card bg-variant="light" class="mb-2">
+  <b-form-group :label="'Stage '.concat(index + 1)" label-class="font-weight-bold"/>
+  <b-form-group label-cols="4" label-size="sm" label="Start altitude:" >
+    <ValidationProvider :name="'Start altitude '.concat(index + 1)"
+                        :rules="rulesStart()" v-slot="{ errors, valid }">
+      <b-input-group size="sm" append="km">
+        <b-form-input type="number"
+                      step="0.1"
+                      size="sm"
+                      v-model="startAlt"
+                      @keyup="valid && setStartAlt($event)"
+                      @click="valid && setStartAlt($event)"
+                      :state="valid && null"
+                      aria-describedby="error"/>
+      </b-input-group>
+      <b-form-invalid-feedback id="error">{{ errors[0] }}</b-form-invalid-feedback>
+    </ValidationProvider>
+  </b-form-group>
+  <b-form-group label-cols="4" label-size="sm" label="End altitude:" >
+    <ValidationProvider :name="'End altitude '.concat(index + 1)"
+                        :rules="rulesEnd()" v-slot="{ errors, valid }">
+      <b-input-group size="sm" append="km">
+        <b-form-input type="number"
+                      step="0.1"
+                      size="sm"
+                      v-model="endAlt"
+                      @keyup="valid && setEndAlt($event)"
+                      @click="valid && setEndAlt($event)"
+                      :state="valid && null"
+                      aria-describedby="error"/>
+      </b-input-group>
+      <b-form-invalid-feedback id="error">{{ errors[0] }}</b-form-invalid-feedback>
+    </ValidationProvider>
+  </b-form-group>
+  <b-form-group label-cols="4" label-size="sm" label="End power:" >
+    <ValidationProvider :name="'End power '.concat(index + 1)"
+                        rules="required|between:100,10000" v-slot="{ errors, valid }">
+      <b-input-group size="sm" append="kW">
+        <b-form-input type="number"
+                      fieldName=""
+                      size="sm"
+                      v-model="endPower"
+                      @keyup="valid && setEndPower($event)"
+                      @click="valid && setEndPower($event)"
+                      :state="valid && null"
+                      aria-describedby="error"/>
+      </b-input-group>
+      <b-form-invalid-feedback id="error">{{ errors[0] }}</b-form-invalid-feedback>
+    </ValidationProvider>
+  </b-form-group>
+</b-card>
+</template>
+
+<script>
+import { mapState, mapGetters} from 'vuex';
+
+export default {
+  name: 'SuperchargerStage',
+  props: ['index'],
+  data() {
+    return {
+      startAlt: 0,
+      endAlt: 3,
+      endPower: 150,
+    };
+  },
+  created() {
+    this.startAlt = this.stage[this.index].startAlt;
+    this.endAlt = this.stage[this.index].endAlt;
+    this.endPower = this.stage[this.index].endPower;
+  },
+  computed: {
+    ...mapState({
+      form: (state) => state.engine.form,
+      stage: (state) => state.engine.form.supercharger,
+    }),
+    ...mapGetters(['stages']),
+    isFirstStage() { return this.index === 0; },
+    isLastStage() { return this.index + 1 === this.stages; },
+  },
+  methods: {
+    setStartAlt(e) {
+      this.$store.dispatch('setStartAlt', { val: e.target.value, id: this.index });
+    },
+    setEndAlt(e) {
+      this.$store.dispatch('setEndAlt', { val: e.target.value, id: this.index });
+    },
+    setEndPower(e) {
+      this.$store.dispatch('setEndPower', { val: e.target.value, id: this.index });
+    },
+    rules() {
+      return {
+        required: true,
+        max_value: this.stage[this.index].endAlt,
+        min_value: 0,
+      };
+    },
+    rulesStart() {
+      return this.isFirstStage ? this.rules() : {
+        ...this.rules(),
+        min_value: this.stage[this.index - 1].endAlt,
+      };
+    },
+    rulesEnd() {
+      return this.isLastStage ? {
+        required: true,
+        min_value: this.stage[this.index].startAlt,
+        max_value: this.form.maxAltitude,
+      } : {
+        required: true,
+        min_value: this.stage[this.index].startAlt,
+        max_value: this.stage[this.index + 1].startAlt,
+      };
+    },
+  },
+};
+</script>
+
+<style scoped>
+.card-body > .form-group {
+  margin-bottom: 0px;
+}
+</style>

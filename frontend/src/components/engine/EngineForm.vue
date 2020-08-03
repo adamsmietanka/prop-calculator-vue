@@ -2,7 +2,7 @@
   <div class="engine-form mt-2">
     <b-form-group label="SL Power">
       <ValidationProvider name="SL Power"
-                          rules="required|min_value:100|max_value:10000" v-slot="{ errors, valid }">
+                          rules="required|between:100,10000" v-slot="{ errors, valid }">
         <b-input-group append="kW">
           <b-form-input type="number"
                         v-model="SLPower"
@@ -15,7 +15,7 @@
       </ValidationProvider>
     </b-form-group>
     <b-form-group label="K coefficient">
-      <b-input-group :append="form.k">
+      <b-input-group :append="form.k.toString()">
         <b-form-input type="range" v-model="kCoefficient" min="0.08" max="0.25" step="0.01"/>
       </b-input-group>
     </b-form-group>
@@ -31,60 +31,28 @@
       </b-form-radio-group>
     </b-form-group>
     <b-form-group label="Supercharger" v-show="engineType === 'piston'">
-      <b-card bg-variant="light" class="mb-2">
-        <b-form-group label="Stage 1"/>
-        <b-form-group label-cols="4" label-size="sm" label="Start altitude:" >
-          <ValidationProvider rules="required|min_value:0|max_value:10" v-slot="{ errors, valid }">
-            <b-input-group size="sm" append="km">
-              <b-form-input type="number"
-                            fieldName=""
-                            size="sm"
-                            v-model="SLPower"
-                            @keyup="valid && setSLPower($event)"
-                            @click="valid && setSLPower($event)"
-                            :state="valid && null"
-                            aria-describedby="error"/>
-            </b-input-group>
-            <b-form-invalid-feedback id="error">{{ errors[0] }}</b-form-invalid-feedback>
-          </ValidationProvider>
-        </b-form-group>
-        <b-form-group label-cols="4" label-size="sm" label="End altitude:" >
-          <ValidationProvider rules="required|min_value:0|max_value:10" v-slot="{ errors, valid }">
-            <b-input-group size="sm" append="km">
-              <b-form-input type="number"
-                            fieldName=""
-                            size="sm"
-                            v-model="SLPower"
-                            @keyup="valid && setSLPower($event)"
-                            @click="valid && setSLPower($event)"
-                            :state="valid && null"
-                            aria-describedby="error"/>
-            </b-input-group>
-            <b-form-invalid-feedback id="error">{{ errors[0] }}</b-form-invalid-feedback>
-          </ValidationProvider>
-        </b-form-group>
-      </b-card>
-      <b-button pill v-if="stages < 3" variant="secondary" @click="addStage">Add stage</b-button>
-      <b-button pill v-if="stages > 0" variant="danger" @click="removeStage">Remove stage</b-button>
+      <SuperchargerStage v-for="(stage, index) in this.form.supercharger"
+                         :key="stage.id"
+                         :index="index"/>
+      <b-button pill :disabled="!anotherStageFits" @click="addStage" >Add stage</b-button>
+      <b-button pill :disabled="stages === 0" variant="danger"
+                @click="removeStage">Remove stage</b-button>
     </b-form-group>
   </div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex';
+import SuperchargerStage from './SuperchargerStage.vue';
 
 export default {
   name: 'EngineForm',
+  components: {
+    SuperchargerStage,
+  },
   data() {
     return {
       SLPower: 100,
-      supercharger: [
-        {
-          startAlt: 0,
-          endAlt: 3,
-          endPwr: 150,
-        },
-      ],
     };
   },
   created() {
@@ -92,7 +60,7 @@ export default {
   },
   computed: {
     ...mapState({ form: (state) => state.engine.form }),
-    ...mapGetters(['maxAltUnits', 'stages']),
+    ...mapGetters(['maxAltUnits', 'stages', 'lastStage']),
     kCoefficient: {
       get() { return this.form.k; },
       set(v) { this.$store.dispatch('setK', v); },
@@ -105,30 +73,47 @@ export default {
       get() { return this.form.engineType; },
       set(v) { this.$store.dispatch('setEngineType', v); },
     },
+    anotherStageFits() {
+      return !this.stages || this.lastStage.endAlt < this.maxAltitude - 3;
+    },
   },
   methods: {
     setSLPower(e) {
       this.$store.dispatch('setSLPower', e.target.value);
     },
     addStage() {
-      this.form.supercharger.push({
-        startAlt: 0,
-        endAlt: 3,
-        endPwr: 150,
-      });
+      this.$store.dispatch('addStage', this.stageData());
     },
-    removeStage() { this.form.supercharger.pop(); },
+    stageData() {
+      if (this.stages === 0) {
+        return {
+          id: 0,
+          startAlt: 0,
+          endAlt: 3,
+          endPower: this.form.SLPower * 1.5,
+        };
+      }
+      return {
+        id: this.lastStage.id + 1,
+        startAlt: this.lastStage.endAlt + 1,
+        endAlt: this.lastStage.endAlt + 3,
+        endPower: this.form.SLPower * 1.2,
+      };
+    },
+    removeStage() {
+      this.$store.dispatch('removeStage');
+    },
   },
 };
 </script>
 
-<style lang="scss">
-.input-group > .custom-range {
+<style lang="scss" scoped>
+.custom-range {
   border: none;
   margin-left: -10px;
 }
 
-.input-group-append {
+.custom-range + .input-group-append {
   margin-left: 0px;
 }
 
