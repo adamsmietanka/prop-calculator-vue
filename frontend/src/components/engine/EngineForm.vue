@@ -97,7 +97,7 @@ export default {
         id: this.lastStage.id + 1,
         startAlt: this.lastStage.endAlt + 1,
         endAlt: this.lastStage.endAlt + 3,
-        endPower: this.form.SLPower * 1.2,
+        endPower: this.form.SLPower * 1.35,
       };
     },
     removeStage() {

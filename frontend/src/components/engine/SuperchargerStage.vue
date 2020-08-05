@@ -1,7 +1,7 @@
 <template>
 <b-card bg-variant="light" class="mb-2">
   <b-form-group :label="'Stage '.concat(index + 1)" label-class="font-weight-bold"/>
-  <b-form-group label-cols="4" label-size="sm" label="Start altitude:" >
+  <b-form-group label-cols="4" label-size="sm" label="Start altitude:" v-if="index">
     <ValidationProvider :name="'Start altitude '.concat(index + 1)"
                         :rules="rulesStart()" v-slot="{ errors, valid }">
       <b-input-group size="sm" append="km">
@@ -35,7 +35,7 @@
   </b-form-group>
   <b-form-group label-cols="4" label-size="sm" label="End power:" >
     <ValidationProvider :name="'End power '.concat(index + 1)"
-                        rules="required|between:100,10000" v-slot="{ errors, valid }">
+                        :rules="rulesEndPower()" v-slot="{ errors, valid }">
       <b-input-group size="sm" append="kW">
         <b-form-input type="number"
                       fieldName=""
@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters} from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 
 export default {
   name: 'SuperchargerStage',
@@ -61,6 +61,7 @@ export default {
   data() {
     return {
       startAlt: 0,
+      startPower: 100,
       endAlt: 3,
       endPower: 150,
     };
@@ -89,28 +90,25 @@ export default {
     setEndPower(e) {
       this.$store.dispatch('setEndPower', { val: e.target.value, id: this.index });
     },
-    rules() {
+    rulesStart() {
       return {
         required: true,
+        min_value: this.isFirstStage ? 0 : this.stage[this.index - 1].endAlt,
         max_value: this.stage[this.index].endAlt,
-        min_value: 0,
-      };
-    },
-    rulesStart() {
-      return this.isFirstStage ? this.rules() : {
-        ...this.rules(),
-        min_value: this.stage[this.index - 1].endAlt,
       };
     },
     rulesEnd() {
-      return this.isLastStage ? {
+      return {
         required: true,
         min_value: this.stage[this.index].startAlt,
-        max_value: this.form.maxAltitude,
-      } : {
+        max_value: this.isLastStage ? this.form.maxAltitude : this.stage[this.index + 1].startAlt,
+      };
+    },
+    rulesEndPower() {
+      return {
         required: true,
-        min_value: this.stage[this.index].startAlt,
-        max_value: this.stage[this.index + 1].startAlt,
+        min_value: this.stage[this.index].startPower,
+        max_value: this.stage[this.index].startPower * 2,
       };
     },
   },
@@ -118,7 +116,15 @@ export default {
 </script>
 
 <style scoped>
+.invalid-feedback {
+  display: block;
+}
+
 .card-body > .form-group {
   margin-bottom: 0px;
+}
+
+.input-group-append {
+  width: 40px;
 }
 </style>
