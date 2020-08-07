@@ -20,6 +20,10 @@ export default new Vuex.Store({
             endPower: 150,
           },
         ],
+        turbocharger: {
+          enabled: false,
+          altitude: 7,
+        },
       },
       data: {},
     },
@@ -55,6 +59,12 @@ export default new Vuex.Store({
     SET_END_POWER(state, { id, power }) {
       state.engine.form.supercharger[id].endPower = power;
     },
+    TOGGLE_TURBO(state, val) {
+      state.engine.form.turbocharger.enabled = val;
+    },
+    SET_TURBO_ALT(state, altitude) {
+      state.engine.form.turbocharger.altitude = altitude;
+    },
   },
   actions: {
     setSLPower({ commit, dispatch }, power) {
@@ -87,34 +97,43 @@ export default new Vuex.Store({
       dispatch('updateStage');
     },
     updateStage({ commit }) {
-      const supercharger = this.state.engine.form.supercharger;
+      const { supercharger } = this.state.engine.form;
       supercharger.forEach(({ startAlt }, index) => {
-        let stage = supercharger[index];
+        const stage = supercharger[index];
         let startPower;
-        if (index === 0)
+        if (index === 0) {
           startPower = this.state.engine.form.SLPower;
-        else {
+        } else {
           const { endAlt, endPower } = supercharger[index - 1];
 
           // International Standard atmosphere
           const sigma = ((44.3 - startAlt) / (44.3 - endAlt)) ** 4.256;
-          const k = this.state.engine.form.k;
+          const { k } = this.state.engine.form;
 
           startPower = endPower * ((sigma - k) / (1 - k));
-          startPower = Math.round(startPower * 100) / 100;
+          startPower = parseFloat(startPower.toPrecision(4));
         }
         stage.startPower = startPower;
-        commit('UPDATE_STAGE', {id: index, stage});
+        commit('UPDATE_STAGE', { id: index, stage });
       });
     },
     setEndPower({ commit, dispatch }, { id, val }) {
       commit('SET_END_POWER', { id, power: parseFloat(val) });
       dispatch('updateStage');
     },
+    toggleTurbo({ commit }, val) {
+      commit('TOGGLE_TURBO', val);
+    },
+    setTurboAlt({ commit }, altitude) {
+      commit('SET_TURBO_ALT', parseFloat(altitude));
+    },
   },
   getters: {
     maxAltUnits(state) {
       return state.engine.form.maxAltitude.toString().concat(' km');
+    },
+    turboAltUnits(state) {
+      return state.engine.form.turbocharger.altitude.toString().concat(' km');
     },
     stages(state) {
       return state.engine.form.supercharger.length;

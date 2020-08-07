@@ -51,35 +51,45 @@ export default {
   },
   methods: {
     x() {
-      let x = [...Array(31).keys()].map((x) => x * 0.5);
-      for (const { startAlt, endAlt } of this.form.supercharger)
+      const x = [...Array(76).keys()].map((i) => i * 0.2);
+      for (const { startAlt, endAlt } of this.form.supercharger) {
         x.push(startAlt, endAlt);
+      }
       return x.sort((a, b) => a - b);
     },
     y() {
-      return this.x().map((x) => this.calculatePower(x));
+      return this.x().map((x) => this.calculatePower(x).toPrecision(4));
     },
     calculatePower(x) {
       let altitude = 0;
       let power = this.form.SLPower;
-      for (const stage of this.form.supercharger) {
-        if (x <= stage.startAlt)
-          return this.curvePower(altitude, power, x);
-        else if (x <= stage.endAlt)
-          return this.linePower(stage, x);
-        else {
+      if (this.form.engineType === 'piston') {
+        if (this.form.turbocharger.enabled) {
+          return x <= this.form.turbocharger.altitude
+            ? this.form.SLPower
+            : this.curvePower(this.form.turbocharger.altitude, this.form.SLPower, x);
+        }
+        for (const stage of this.form.supercharger) {
+          if (x <= stage.startAlt) {
+            return this.curvePower(altitude, power, x);
+          }
+          if (x <= stage.endAlt) {
+            return this.linePower(stage, x);
+          }
           altitude = stage.endAlt;
           power = stage.endPower;
         }
+        return this.curvePower(altitude, power, x);
       }
-      return this.curvePower(altitude, power, x);
+      return power * (1 - x / 44.3) ** 2.5536;
     },
     curvePower(curveStart, curveStartPower, x) {
       // International Standard atmosphere
       const sigma = ((44.3 - x) / (44.3 - curveStart)) ** 4.256;
       return curveStartPower * ((sigma - this.form.k) / (1 - this.form.k));
     },
-    linePower({ startAlt, startPower, endAlt, endPower }, x) {
+    linePower: (stage, x) => {
+      const { startAlt, startPower, endAlt, endPower } = stage;
       const a = (endPower - startPower) / (endAlt - startAlt);
       return startPower + a * (x - startAlt);
     },

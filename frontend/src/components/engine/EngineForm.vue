@@ -14,29 +14,36 @@
         <b-form-invalid-feedback id="error">{{ errors[0] }}</b-form-invalid-feedback>
       </ValidationProvider>
     </b-form-group>
-    <b-form-group label="K coefficient">
-      <b-input-group :append="form.k.toString()">
-        <b-form-input type="range" v-model="kCoefficient" min="0.08" max="0.25" step="0.01"/>
-      </b-input-group>
-    </b-form-group>
     <b-form-group label="Max altitude">
       <b-input-group :append="maxAltUnits">
         <b-form-input type="range" v-model="maxAltitude" min="10" max="15"/>
       </b-input-group>
     </b-form-group>
     <b-form-group label="Engine type">
-      <b-form-radio-group v-model="engineType" stacked >
+      <b-form-radio-group v-model="engineType" >
         <b-form-radio value="piston">Piston</b-form-radio>
         <b-form-radio value="turbine">Turbine</b-form-radio>
       </b-form-radio-group>
+    </b-form-group>
+    <b-form-group label="K coefficient" v-show="engineType === 'piston'">
+      <b-input-group :append="form.k.toString()">
+        <b-form-input type="range" v-model="kCoefficient" min="0.08" max="0.25" step="0.01"/>
+      </b-input-group>
     </b-form-group>
     <b-form-group label="Supercharger" v-show="engineType === 'piston'">
       <SuperchargerStage v-for="(stage, index) in this.form.supercharger"
                          :key="stage.id"
                          :index="index"/>
-      <b-button pill :disabled="!anotherStageFits" @click="addStage" >Add stage</b-button>
+      <b-button pill :disabled="form.turbocharger.enabled || !this.anotherStageFits"
+                @click="addStage" >Add stage</b-button>
       <b-button pill :disabled="stages === 0" variant="danger"
                 @click="removeStage">Remove stage</b-button>
+    </b-form-group>
+    <b-form-group label="Turbocharger" v-show="engineType === 'piston'">
+      <b-button pill :disabled="stages > 0" :pressed.sync="turbo" v-model="turbo" variant="primary">
+        {{ turbo ? 'Remove' : 'Add' }}
+      </b-button>
+      <Turbocharger v-show="turbo"/>
     </b-form-group>
   </div>
 </template>
@@ -44,11 +51,13 @@
 <script>
 import { mapState, mapGetters } from 'vuex';
 import SuperchargerStage from './SuperchargerStage.vue';
+import Turbocharger from './Turbocharger.vue';
 
 export default {
   name: 'EngineForm',
   components: {
     SuperchargerStage,
+    Turbocharger,
   },
   data() {
     return {
@@ -75,6 +84,10 @@ export default {
     },
     anotherStageFits() {
       return !this.stages || this.lastStage.endAlt < this.maxAltitude - 3;
+    },
+    turbo: {
+      get() { return this.form.turbocharger.enabled; },
+      set(v) { this.$store.dispatch('toggleTurbo', v); },
     },
   },
   methods: {
@@ -123,5 +136,6 @@ export default {
 
 button {
   margin-right: 10px;
+  margin-bottom: 10px;
 }
 </style>
