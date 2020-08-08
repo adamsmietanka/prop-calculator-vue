@@ -2,10 +2,10 @@
   <header class="header">
     <div id="nav">
       <router-link to="/">
-        <h1>Propeller Calculator</h1>
+        <h2>Prop Calculator</h2>
       </router-link>
       <router-link to="/engine">Engine</router-link>
-      <router-link to="/about">About</router-link>
+      <router-link to="/propeller">Propeller</router-link>
     </div>
   </header>
 </template>
@@ -33,7 +33,7 @@ export default {
     color: #42b983;
   }
 
-  h1 {
+  h2 {
     display: inline;
   }
 </style>

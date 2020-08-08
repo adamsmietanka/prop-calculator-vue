@@ -6,64 +6,69 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     engine: {
-      form: {
-        SLPower: 100,
-        k: 0.1,
-        maxAltitude: 10,
-        engineType: 'piston',
-        supercharger: [
-          {
-            id: 0,
-            startAlt: 0,
-            startPower: 100,
-            endAlt: 3,
-            endPower: 150,
-          },
-        ],
-        turbocharger: {
-          enabled: false,
-          altitude: 7,
+      SLPower: 100,
+      k: 0.1,
+      maxAltitude: 10,
+      type: 'piston',
+      supercharger: [
+        {
+          id: 0,
+          startAlt: 0,
+          startPower: 100,
+          endAlt: 3,
+          endPower: 150,
         },
+      ],
+      turbocharger: {
+        enabled: false,
+        altitude: 7,
       },
-      data: {},
+      ratio: 0.4,
+      revs: 50,
     },
   },
   mutations: {
     SET_K(state, k) {
-      state.engine.form.k = k;
+      state.engine.k = k;
     },
     SET_SL_POWER(state, power) {
-      state.engine.form.SLPower = power;
+      state.engine.SLPower = power;
     },
     SET_MAX_ALT(state, altitude) {
-      state.engine.form.maxAltitude = altitude;
+      state.engine.maxAltitude = altitude;
     },
     SET_ENGINE_TYPE(state, type) {
-      state.engine.form.engineType = type;
+      state.engine.type = type;
     },
     ADD_STAGE(state, stage) {
-      state.engine.form.supercharger.push(stage);
+      state.engine.supercharger.push(stage);
     },
     REMOVE_STAGE(state) {
-      state.engine.form.supercharger.pop();
+      state.engine.supercharger.pop();
     },
     UPDATE_STAGE(state, { id, stage }) {
-      Vue.set(state.engine.form.supercharger, id, stage);
+      Vue.set(state.engine.supercharger, id, stage);
     },
     SET_START_ALT(state, { id, altitude }) {
-      state.engine.form.supercharger[id].startAlt = altitude;
+      state.engine.supercharger[id].startAlt = altitude;
     },
     SET_END_ALT(state, { id, altitude }) {
-      state.engine.form.supercharger[id].endAlt = altitude;
+      state.engine.supercharger[id].endAlt = altitude;
     },
     SET_END_POWER(state, { id, power }) {
-      state.engine.form.supercharger[id].endPower = power;
+      state.engine.supercharger[id].endPower = power;
     },
     TOGGLE_TURBO(state, val) {
-      state.engine.form.turbocharger.enabled = val;
+      state.engine.turbocharger.enabled = val;
     },
     SET_TURBO_ALT(state, altitude) {
-      state.engine.form.turbocharger.altitude = altitude;
+      state.engine.turbocharger.altitude = altitude;
+    },
+    SET_RATIO(state, ratio) {
+      state.engine.ratio = ratio;
+    },
+    SET_REVS(state, revs) {
+      state.engine.revs = revs;
     },
   },
   actions: {
@@ -97,18 +102,18 @@ export default new Vuex.Store({
       dispatch('updateStage');
     },
     updateStage({ commit }) {
-      const { supercharger } = this.state.engine.form;
+      const { supercharger } = this.state.engine;
       supercharger.forEach(({ startAlt }, index) => {
         const stage = supercharger[index];
         let startPower;
         if (index === 0) {
-          startPower = this.state.engine.form.SLPower;
+          startPower = this.state.engine.SLPower;
         } else {
           const { endAlt, endPower } = supercharger[index - 1];
 
           // International Standard atmosphere
           const sigma = ((44.3 - startAlt) / (44.3 - endAlt)) ** 4.256;
-          const { k } = this.state.engine.form;
+          const { k } = this.state.engine;
 
           startPower = endPower * ((sigma - k) / (1 - k));
           startPower = parseFloat(startPower.toPrecision(4));
@@ -127,19 +132,25 @@ export default new Vuex.Store({
     setTurboAlt({ commit }, altitude) {
       commit('SET_TURBO_ALT', parseFloat(altitude));
     },
+    setRatio({ commit }, ratio) {
+      commit('SET_RATIO', parseFloat(ratio));
+    },
+    setRevs({ commit }, revs) {
+      commit('SET_REVS', parseFloat(revs));
+    },
   },
   getters: {
     maxAltUnits(state) {
-      return state.engine.form.maxAltitude.toString().concat(' km');
+      return state.engine.maxAltitude.toString().concat(' km');
     },
     turboAltUnits(state) {
-      return state.engine.form.turbocharger.altitude.toString().concat(' km');
+      return state.engine.turbocharger.altitude.toString().concat(' km');
     },
     stages(state) {
-      return state.engine.form.supercharger.length;
+      return state.engine.supercharger.length;
     },
     lastStage(state) {
-      return state.engine.form.supercharger.slice(-1)[0];
+      return state.engine.supercharger.slice(-1)[0];
     },
   },
   modules: {

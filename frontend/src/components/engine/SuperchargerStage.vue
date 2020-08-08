@@ -1,6 +1,6 @@
 <template>
 <b-card bg-variant="light" class="mb-2">
-  <b-form-group :label="'Stage '.concat(index + 1)" label-class="font-weight-bold"/>
+  <b-form-group :label="index ? 'Full Speed' : 'Half Speed'" label-class="font-weight-bold"/>
   <b-form-group label-cols="4" label-size="sm" label="Start altitude:" v-if="index">
     <ValidationProvider :name="'Start altitude '.concat(index + 1)"
                         :rules="rulesStart()" v-slot="{ errors, valid }">
@@ -73,8 +73,8 @@ export default {
   },
   computed: {
     ...mapState({
-      form: (state) => state.engine.form,
-      stage: (state) => state.engine.form.supercharger,
+      engine: (state) => state.engine,
+      stage: (state) => state.engine.supercharger,
     }),
     ...mapGetters(['stages']),
     isFirstStage() { return this.index === 0; },
@@ -101,7 +101,7 @@ export default {
       return {
         required: true,
         min_value: this.stage[this.index].startAlt,
-        max_value: this.isLastStage ? this.form.maxAltitude : this.stage[this.index + 1].startAlt,
+        max_value: this.isLastStage ? this.engine.maxAltitude : this.stage[this.index + 1].startAlt,
       };
     },
     rulesEndPower() {

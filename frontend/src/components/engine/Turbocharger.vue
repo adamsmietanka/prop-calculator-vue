@@ -16,10 +16,10 @@ import { mapState, mapGetters } from 'vuex';
 export default {
   name: 'Turbocharger',
   computed: {
-    ...mapState({ form: (state) => state.engine.form }),
+    ...mapState({ engine: (state) => state.engine }),
     ...mapGetters(['turboAltUnits']),
     maxAltitude: {
-      get() { return this.form.turbocharger.altitude; },
+      get() { return this.engine.turbocharger.altitude; },
       set(v) { this.$store.dispatch('setTurboAlt', v); },
     },
   },
