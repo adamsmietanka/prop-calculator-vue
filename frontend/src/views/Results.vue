@@ -15,7 +15,7 @@
 import ResultsForm from '@/components/results/ResultsForm.vue';
 
 export default {
-  name: 'Propeller',
+  name: 'Results',
   components: {
     ResultsForm,
   },

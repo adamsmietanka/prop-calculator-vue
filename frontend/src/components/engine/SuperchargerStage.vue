@@ -2,8 +2,7 @@
 <b-card bg-variant="light" class="mb-2">
   <b-form-group :label="index ? 'Full Speed' : 'Half Speed'" label-class="font-weight-bold"/>
   <b-form-group label-cols="4" label-size="sm" label="Start altitude:" v-if="index">
-    <ValidationProvider :name="'Start altitude '.concat(index + 1)"
-                        :rules="rulesStart()" v-slot="{ errors, valid }">
+    <ValidationProvider name="Start altitude " :rules="rulesStart()" v-slot="{ errors, valid }">
       <b-input-group size="sm" append="km">
         <b-form-input type="number"
                       step="0.1"
@@ -18,8 +17,7 @@
     </ValidationProvider>
   </b-form-group>
   <b-form-group label-cols="4" label-size="sm" label="End altitude:" >
-    <ValidationProvider :name="'End altitude '.concat(index + 1)"
-                        :rules="rulesEnd()" v-slot="{ errors, valid }">
+    <ValidationProvider name="End altitude" :rules="rulesEnd()" v-slot="{ errors, valid }">
       <b-input-group size="sm" append="km">
         <b-form-input type="number"
                       step="0.1"
@@ -34,11 +32,9 @@
     </ValidationProvider>
   </b-form-group>
   <b-form-group label-cols="4" label-size="sm" label="End power:" >
-    <ValidationProvider :name="'End power '.concat(index + 1)"
-                        :rules="rulesEndPower()" v-slot="{ errors, valid }">
+    <ValidationProvider name="End power" :rules="rulesEndPower()" v-slot="{ errors, valid }">
       <b-input-group size="sm" append="kW">
         <b-form-input type="number"
-                      fieldName=""
                       size="sm"
                       v-model="endPower"
                       @keyup="valid && setEndPower($event)"

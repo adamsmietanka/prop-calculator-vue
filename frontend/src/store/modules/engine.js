@@ -1,5 +1,6 @@
 import turbocharger from './engine/turbo';
 import supercharger from './engine/supercharger';
+import { prepareX, roundPower } from './engine/helpers';
 
 export default {
   modules: {
@@ -13,6 +14,10 @@ export default {
     type: 'piston',
     ratio: 0.4,
     revs: 50,
+    data: {
+      x: [],
+      y: [],
+    },
   },
   mutations: {
     SET_K(state, k) {
@@ -33,6 +38,9 @@ export default {
     SET_REVS(state, revs) {
       state.revs = revs;
     },
+    SET_DATA(state, data) {
+      state.data = data;
+    },
   },
   actions: {
     setSLPower({ commit, dispatch }, power) {
@@ -46,14 +54,21 @@ export default {
     setMaxAlt({ commit }, altitude) {
       commit('SET_MAX_ALT', parseFloat(altitude));
     },
-    setEngineType({ commit }, type) {
+    setEngineType({ commit, dispatch }, type) {
       commit('SET_ENGINE_TYPE', type);
+      dispatch('updateData');
     },
     setRatio({ commit }, ratio) {
       commit('SET_RATIO', parseFloat(ratio));
     },
     setRevs({ commit }, revs) {
       commit('SET_REVS', parseFloat(revs));
+    },
+    updateData({ state, commit, rootState }) {
+      const x = prepareX(state);
+      const y = x.map((i) => roundPower(state, i));
+      commit('SET_DATA', { x, y });
+      commit('SET_POWER', roundPower(state, rootState.results.altitude));
     },
   },
   getters: {

@@ -43,6 +43,7 @@
       <ValidationProvider name="Altitude" :rules="rulesAltitude()" v-slot="{ errors, valid }">
         <b-input-group append="km">
           <b-form-input type="number"
+                        step="0.1"
                         v-model="altitude"
                         @keyup="valid && setAltitude($event)"
                         @click="valid && setAltitude($event)"
@@ -52,7 +53,12 @@
         <b-form-invalid-feedback id="error">{{ errors[0] }}</b-form-invalid-feedback>
       </ValidationProvider>
     </b-form-group>
-      <b-button block variant="primary" @click="update" >Update</b-button>
+    <b-form-group label="Power">
+      <b-input-group append="kW">
+        <b-form-input disabled v-model="results.power" />
+      </b-input-group>
+    </b-form-group>
+    <b-button block variant="primary" @click="update" class="mt-2">Update</b-button>
   </div>
 </template>
 

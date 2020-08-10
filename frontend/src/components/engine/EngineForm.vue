@@ -8,7 +8,7 @@
                         v-model="SLPower"
                         @keyup="valid && setSLPower($event)"
                         @click="valid && setSLPower($event)"
-                        :state="valid ? null : false"
+                        :state="valid && null"
                         aria-describedby="error"/>
         </b-input-group>
         <b-form-invalid-feedback id="error">{{ errors[0] }}</b-form-invalid-feedback>
@@ -29,13 +29,15 @@
       <SuperchargerStage v-for="(stage, index) in this.engine.supercharger"
                          :key="stage.id"
                          :index="index"/>
-      <b-button pill :disabled="engine.turbocharger.enabled || stages === 2"
-                @click="addStage" >{{ stages ? 'Add Speed' : 'Add Stage' }}</b-button>
-      <b-button pill :disabled="stages === 0" variant="danger"
-                @click="removeStage">{{ stages ? 'Remove Speed' : 'Remove Stage' }}</b-button>
+      <b-button :disabled="engine.turbocharger.enabled || stages === 2" @click="addStage" >
+        {{ stages ? 'Add Speed' : 'Add Stage' }}
+      </b-button>
+      <b-button :disabled="stages === 0" variant="danger" @click="removeStage">
+        {{ stages ? 'Remove Speed' : 'Remove Stage' }}
+      </b-button>
     </b-form-group>
     <b-form-group label="Turbocharger" v-show="engineType === 'piston'">
-      <b-button pill :disabled="stages > 0" :pressed.sync="turbo" v-model="turbo" variant="primary">
+      <b-button :disabled="stages > 0" :pressed.sync="turbo" v-model="turbo" variant="primary">
         {{ turbo ? 'Remove' : 'Add' }}
       </b-button>
       <Turbocharger v-show="turbo"/>
@@ -98,7 +100,7 @@ export default {
         id: this.lastStage.id + 1,
         startAlt: this.lastStage.endAlt + 2,
         endAlt: this.lastStage.endAlt + 5,
-        endPower: this.engine.SLPower * 1.4,
+        endPower: Math.round(this.engine.SLPower * 1.4),
       };
     },
     removeStage() {

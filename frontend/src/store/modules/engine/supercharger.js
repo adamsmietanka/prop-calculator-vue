@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import { curvePower } from './helpers';
 
 export default {
   state: [
@@ -35,8 +36,9 @@ export default {
       commit('ADD_STAGE', stage);
       dispatch('updateStage');
     },
-    removeStage({ commit }) {
+    removeStage({ commit, dispatch }) {
       commit('REMOVE_STAGE');
+      dispatch('updateData');
     },
     setStartAlt({ commit, dispatch }, { id, val }) {
       commit('SET_START_ALT', { id, altitude: parseFloat(val) });
@@ -46,19 +48,17 @@ export default {
       commit('SET_END_ALT', { id, altitude: parseFloat(val) });
       dispatch('updateStage');
     },
-    updateStage({ state, commit, rootState }) {
-      for (const [index, stage] of state.entries()) {
+    updateStage({ commit, dispatch, rootState }) {
+      for (const [index, stage] of rootState.engine.supercharger.entries()) {
         let startPower = rootState.engine.SLPower;
         if (index === 1) {
-          const { endAlt, endPower } = state[0];
-          // International Standard atmosphere
-          const sigma = ((44.3 - stage.startAlt) / (44.3 - endAlt)) ** 4.256;
-          startPower = endPower * ((sigma - rootState.engine.k) / (1 - rootState.engine.k));
-          startPower = parseFloat(startPower.toPrecision(4));
+          const { endAlt, endPower } = rootState.engine.supercharger[0];
+          startPower = curvePower(endAlt, endPower, stage.startAlt, rootState.engine.k);
         }
         stage.startPower = startPower;
         commit('UPDATE_STAGE', { id: index, stage });
       }
+      dispatch('updateData');
     },
     setEndPower({ commit, dispatch }, { id, val }) {
       commit('SET_END_POWER', { id, power: parseFloat(val) });

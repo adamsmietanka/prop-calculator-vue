@@ -12,11 +12,13 @@ export default {
     },
   },
   actions: {
-    toggleTurbo({ commit }, val) {
+    toggleTurbo({ commit, dispatch }, val) {
       commit('TOGGLE_TURBO', val);
+      dispatch('updateData');
     },
-    setTurboAlt({ commit }, altitude) {
+    setTurboAlt({ commit, dispatch }, altitude) {
       commit('SET_TURBO_ALT', parseFloat(altitude));
+      dispatch('updateData');
     },
   },
   getters: {

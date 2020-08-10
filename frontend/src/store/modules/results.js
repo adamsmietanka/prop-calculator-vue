@@ -1,3 +1,5 @@
+import { roundPower } from './engine/helpers';
+
 export default {
   state: {
     maxAirspeed: 150,
@@ -47,11 +49,10 @@ export default {
     setBladePitch({ commit }, pitch) {
       commit('SET_BLADE_PITCH', parseFloat(pitch));
     },
-    setAltitude({ commit }, altitude) {
-      commit('SET_ALTITUDE', parseFloat(altitude));
-    },
-    setPower({ commit }, power) {
-      commit('SET_POWER', parseFloat(power));
+    setAltitude({ commit, rootState }, altitude) {
+      altitude = parseFloat(altitude);
+      commit('SET_ALTITUDE', altitude);
+      commit('SET_POWER', roundPower(rootState.engine, altitude));
     },
   },
 };

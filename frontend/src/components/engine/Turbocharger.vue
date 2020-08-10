@@ -1,5 +1,5 @@
 <template>
-  <b-form-group label-size="sm" label="Max altitude:">
+  <b-form-group label-size="sm" label="Turbo max altitude">
     <b-input-group :append="turboAltUnits">
       <b-form-input type="range"
                     size="sm"
