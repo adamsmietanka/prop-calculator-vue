@@ -2,7 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
 import Engine from '../views/Engine.vue';
-import Propeller from '../views/Results.vue';
+import Results from '../views/Results.vue';
 
 Vue.use(VueRouter);
 
@@ -18,9 +18,9 @@ const routes = [
     component: Engine,
   },
   {
-    path: '/propeller',
-    name: 'Propeller',
-    component: Propeller,
+    path: '/results',
+    name: 'Results',
+    component: Results,
   },
 ];
 

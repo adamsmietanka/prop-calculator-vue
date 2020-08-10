@@ -14,7 +14,10 @@ export default {
     VuePlotly,
   },
   computed: {
-    ...mapState({ engine: (state) => state.engine }),
+    ...mapState({
+      results: (state) => state.results,
+      engine: (state) => state.engine,
+    }),
     plotData() {
       return [{ x: this.x(), y: this.y() }];
     },
@@ -58,6 +61,8 @@ export default {
       return x.sort((a, b) => a - b);
     },
     y() {
+      const power = this.calculatePower(this.results.altitude).toPrecision(4);
+      this.$store.dispatch('setPower', power);
       return this.x().map((x) => this.calculatePower(x).toPrecision(4));
     },
     calculatePower(x) {
