@@ -58,12 +58,15 @@
         <b-form-input disabled v-model="results.power" />
       </b-input-group>
     </b-form-group>
+    <b-form-group label="Cp">
+      <b-form-input disabled v-model="Cp" />
+    </b-form-group>
     <b-button block variant="primary" @click="update" class="mt-2">Update</b-button>
   </div>
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 
 export default {
   name: 'ResultsForm',
@@ -78,10 +81,11 @@ export default {
     this.maxAirspeed = this.results.maxAirspeed;
     this.diameter = this.results.diameter;
     this.altitude = this.results.altitude;
+    this.update();
   },
   computed: {
     ...mapState({
-      results: (state) => state.results,
+      results: (state) => state.results.form,
       engine: (state) => state.engine,
     }),
     ...mapGetters(['maxAltUnits']),
@@ -100,6 +104,15 @@ export default {
     bladePitch: {
       get() { return this.results.bladePitch; },
       set(v) { this.$store.dispatch('setBladePitch', v); },
+    },
+    Cp() {
+      const rho = 1.2255 * (1 - (this.results.altitude / 44.3)) ** 4.256;
+      const propSpeed = (this.engine.revs / 60) * this.engine.ratio;
+      const Cp = (this.results.power * 1000) / (rho * propSpeed ** 3 * this.results.diameter ** 5);
+      return parseFloat(Cp.toPrecision(4));
+    },
+    propSpeed() {
+      return (this.engine.revs / 60) * this.engine.ratio;
     },
   },
   methods: {
@@ -120,7 +133,10 @@ export default {
       };
     },
     update() {
-      // this.$store.dispatch('setAltitude', e.target.value);
+      this.$store.dispatch('postData', {
+        Cp: this.Cp,
+        prop_speed: this.propSpeed,
+      });
     },
   },
 };
@@ -133,7 +149,7 @@ export default {
 }
 
 .custom-range + .input-group-append {
-  margin-left: 0px;
+  margin-left: 0;
 }
 
 .invalid-feedback {

@@ -8,12 +8,12 @@ export default {
     supercharger,
   },
   state: {
-    SLPower: 100,
+    SLPower: 800,
     k: 0.1,
     maxAltitude: 10,
     type: 'piston',
     ratio: 0.4,
-    revs: 50,
+    revs: 3000,
     data: {
       x: [],
       y: [],
@@ -68,7 +68,7 @@ export default {
       const x = prepareX(state);
       const y = x.map((i) => roundPower(state, i));
       commit('SET_DATA', { x, y });
-      commit('SET_POWER', roundPower(state, rootState.results.altitude));
+      commit('SET_POWER', roundPower(state, rootState.results.form.altitude));
     },
   },
   getters: {

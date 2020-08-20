@@ -58,7 +58,7 @@ export default {
   },
   data() {
     return {
-      SLPower: 100,
+      SLPower: 1000,
     };
   },
   created() {
@@ -93,14 +93,14 @@ export default {
           id: 0,
           startAlt: 0,
           endAlt: 3,
-          endPower: this.engine.SLPower * 1.5,
+          endPower: this.engine.SLPower * 1.25,
         };
       }
       return {
         id: this.lastStage.id + 1,
         startAlt: this.lastStage.endAlt + 2,
         endAlt: this.lastStage.endAlt + 5,
-        endPower: Math.round(this.engine.SLPower * 1.4),
+        endPower: Math.round(this.engine.SLPower * 1.2),
       };
     },
     removeStage() {

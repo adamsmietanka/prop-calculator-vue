@@ -57,9 +57,9 @@ export default {
   data() {
     return {
       startAlt: 0,
-      startPower: 100,
+      startPower: 800,
       endAlt: 3,
-      endPower: 150,
+      endPower: 1000,
     };
   },
   created() {
@@ -104,7 +104,7 @@ export default {
       return {
         required: true,
         min_value: this.stage[this.index].startPower,
-        max_value: this.stage[this.index].startPower * 2,
+        max_value: this.stage[this.index].startPower * 1.5,
       };
     },
   },
@@ -117,7 +117,7 @@ export default {
 }
 
 .card-body > .form-group {
-  margin-bottom: 0px;
+  margin-bottom: 0;
 }
 
 .input-group-append {

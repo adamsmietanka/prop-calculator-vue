@@ -25,9 +25,10 @@
     </b-form-group>
     <b-form-group label="Engine speed">
       <ValidationProvider name="Engine speed"
-                          rules="required|between:20,100" v-slot="{ errors, valid }">
-        <b-input-group append="1/s">
+                          rules="required|between:2000,7000" v-slot="{ errors, valid }">
+        <b-input-group append="rpm">
           <b-form-input type="number"
+                        step="100"
                         v-model="revs"
                         @keyup="valid && setRevs($event)"
                         @click="valid && setRevs($event)"
@@ -49,7 +50,7 @@ export default {
   data() {
     return {
       ratio: 100,
-      revs: 50,
+      revs: 3000,
     };
   },
   created() {

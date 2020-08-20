@@ -1,13 +1,15 @@
 import os
+import json
 
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, request, jsonify
 from flask_bootstrap import Bootstrap
 from flask_cors import CORS
 
-from forms import TextForm, RadioForm, SpecsForm
-from calc import PropVariable, PropFixed
-from commands import create_tables
-from models import db
+from calculator.forms import TextForm, RadioForm, SpecsForm
+from calculator.prop import PropVariable, PropFixed
+
+from calculator.commands import create_tables
+from calculator.models import db
 
 app = Flask(__name__)
 Bootstrap(app)
@@ -33,10 +35,12 @@ def valid_inputs(inputs):
     return validated and blades_number
 
 
-@app.route('/', methods=['GET'])
-def index():
-    inputs = get_inputs(request)
-    return render_template('index.html', inputs=inputs)
+@app.route('/test', methods=['POST'])
+def test():
+    data = json.loads(request.data.decode('utf-8'))
+    print(data)
+    prop = PropVariable(data)
+    return prop.get_data()
 
 
 @app.route('/prop-data', methods=['POST'])

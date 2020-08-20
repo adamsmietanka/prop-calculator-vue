@@ -6,9 +6,9 @@ export default {
     {
       id: 0,
       startAlt: 0,
-      startPower: 100,
+      startPower: 800,
       endAlt: 3,
-      endPower: 150,
+      endPower: 1000,
     },
   ],
   mutations: {

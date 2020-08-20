@@ -1,5 +1,5 @@
 <template>
-<b-container class="bv-example-row">
+<b-container>
   <VuePlotly :data="[engine.data]" :layout="layout" :options="options"/>
 </b-container>
 </template>
@@ -47,6 +47,7 @@ export default {
       return {
         scrollZoom: false,
         responsive: true,
+        modeBarButtons: [['toImage']],
       };
     },
   },

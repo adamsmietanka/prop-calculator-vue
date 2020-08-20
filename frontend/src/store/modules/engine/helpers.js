@@ -18,10 +18,6 @@ function linePower(stage, x) {
   return stage.startPower + a * (x - stage.startAlt);
 }
 
-export function roundPower(engine, x) {
-  return parseFloat(calculatePower(engine, x).toPrecision(4));
-}
-
 function calculatePower(engine, x) {
   let altitude = 0;
   let power = engine.SLPower;
@@ -44,4 +40,8 @@ function calculatePower(engine, x) {
     return curvePower(altitude, power, x, engine.k);
   }
   return power * (1 - x / 44.3) ** 2.5536;
+}
+
+export function roundPower(engine, x) {
+  return parseFloat(calculatePower(engine, x).toPrecision(4));
 }
