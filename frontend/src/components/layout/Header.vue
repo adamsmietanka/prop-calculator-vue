@@ -5,6 +5,7 @@
         <h2>Prop Calculator</h2>
       </router-link>
       <router-link to="/engine">Engine</router-link>
+      <router-link to="/propeller">Propeller</router-link>
       <router-link to="/results">Results</router-link>
     </div>
   </header>

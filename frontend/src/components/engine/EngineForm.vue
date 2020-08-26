@@ -1,42 +1,38 @@
 <template>
   <div class="engine-form mt-2">
-    <b-form-group label="SL Power">
-      <ValidationProvider name="SL Power"
-                          rules="required|between:100,10000" v-slot="{ errors, valid }">
-        <b-input-group append="kW">
-          <b-form-input type="number"
-                        v-model="SLPower"
-                        @keyup="valid && setSLPower($event)"
-                        @click="valid && setSLPower($event)"
-                        :state="valid && null"
-                        aria-describedby="error"/>
-        </b-input-group>
-        <b-form-invalid-feedback id="error">{{ errors[0] }}</b-form-invalid-feedback>
-      </ValidationProvider>
-    </b-form-group>
+    <NumberInput name="SL Power"
+                 :number="engine.SLPower"
+                 rules="required|between:100,10000"
+                 :setter="setSLPower"
+                 unit="kW"/>
     <b-form-group label="Engine type">
-      <b-form-radio-group v-model="engineType" >
-        <b-form-radio value="piston">Piston</b-form-radio>
-        <b-form-radio value="turbine">Turbine</b-form-radio>
-      </b-form-radio-group>
+      <b-form-radio-group v-model="engineType" :options="['Piston', 'Turbine']"/>
     </b-form-group>
-    <b-form-group label="K coefficient" v-show="engineType === 'piston'">
+    <b-form-group label="K coefficient" v-show="engineType === 'Piston'">
       <b-input-group :append="engine.k.toString()">
-        <b-form-input type="range" v-model="kCoefficient" min="0.08" max="0.25" step="0.01"/>
+        <b-form-input type="range"
+                      v-model="kCoefficient"
+                      min="0.08"
+                      max="0.25"
+                      step="0.01"/>
       </b-input-group>
     </b-form-group>
-    <b-form-group label="Supercharger" v-show="engineType === 'piston'">
-      <SuperchargerStage v-for="(stage, index) in this.engine.supercharger"
+    <b-form-group label="Supercharger" v-show="engineType === 'Piston'">
+      <SuperchargerForm v-for="(stage, index) in this.engine.supercharger"
                          :key="stage.id"
                          :index="index"/>
-      <b-button :disabled="engine.turbocharger.enabled || stages === 2" @click="addStage" >
+      <b-button :disabled="engine.turbocharger.enabled || stages === 2"
+                variant="primary"
+                @click="addStage" >
         {{ stages ? 'Add Speed' : 'Add Stage' }}
       </b-button>
-      <b-button :disabled="stages === 0" variant="danger" @click="removeStage">
+      <b-button :disabled="stages === 0"
+                variant="danger"
+                @click="removeStage">
         {{ stages ? 'Remove Speed' : 'Remove Stage' }}
       </b-button>
     </b-form-group>
-    <b-form-group label="Turbocharger" v-show="engineType === 'piston'">
+    <b-form-group label="Turbocharger" v-show="engineType === 'Piston'">
       <b-button :disabled="stages > 0" :pressed.sync="turbo" v-model="turbo" variant="primary">
         {{ turbo ? 'Remove' : 'Add' }}
       </b-button>
@@ -47,26 +43,20 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import SuperchargerStage from './SuperchargerStage.vue';
+import SuperchargerForm from './SuperchargerForm.vue';
 import Turbocharger from './Turbocharger.vue';
+import NumberInput from '../NumberInput.vue';
 
 export default {
   name: 'EngineForm',
   components: {
-    SuperchargerStage,
+    SuperchargerForm,
     Turbocharger,
-  },
-  data() {
-    return {
-      SLPower: 1000,
-    };
-  },
-  created() {
-    this.SLPower = this.engine.SLPower;
+    NumberInput,
   },
   computed: {
     ...mapState({ engine: (state) => state.engine }),
-    ...mapGetters(['maxAltUnits', 'stages', 'lastStage']),
+    ...mapGetters(['stages', 'lastStage']),
     kCoefficient: {
       get() { return this.engine.k; },
       set(v) { this.$store.dispatch('setK', v); },
@@ -81,14 +71,14 @@ export default {
     },
   },
   methods: {
-    setSLPower(e) {
-      this.$store.dispatch('setSLPower', e.target.value);
+    setSLPower(v) {
+      this.$store.dispatch('setSLPower', v);
     },
     addStage() {
       this.$store.dispatch('addStage', this.stageData());
     },
     stageData() {
-      if (this.stages === 0) {
+      if (this.stages == 0) {
         return {
           id: 0,
           startAlt: 0,
@@ -117,7 +107,7 @@ export default {
 }
 
 .custom-range + .input-group-append {
-  margin-left: 0px;
+  margin-left: 0;
 }
 
 .invalid-feedback {

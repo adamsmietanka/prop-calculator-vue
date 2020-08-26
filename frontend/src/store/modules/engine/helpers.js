@@ -21,7 +21,7 @@ function linePower(stage, x) {
 function calculatePower(engine, x) {
   let altitude = 0;
   let power = engine.SLPower;
-  if (engine.type === 'piston') {
+  if (engine.type === 'Piston') {
     if (engine.turbocharger.enabled) {
       return x <= engine.turbocharger.altitude
         ? engine.SLPower

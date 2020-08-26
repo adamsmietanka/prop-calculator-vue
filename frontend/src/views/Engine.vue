@@ -14,9 +14,9 @@
 
 <script>
 // @ is an alias to /src
-import EngineForm from '@/components/engine/EngineForm.vue';
-import EngineFormAdd from '@/components/engine/EngineFormAdd.vue';
-import EnginePlot from '@/components/engine/EnginePlot.vue';
+import EngineForm from '../components/engine/EngineForm.vue';
+import EngineFormAdd from '../components/engine/EngineFormAdd.vue';
+import EnginePlot from '../components/engine/EnginePlot.vue';
 
 export default {
   name: 'Engine',

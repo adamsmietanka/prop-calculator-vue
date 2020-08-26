@@ -11,7 +11,7 @@ export default {
     SLPower: 800,
     k: 0.1,
     maxAltitude: 10,
-    type: 'piston',
+    type: 'Piston',
     ratio: 0.4,
     revs: 3000,
     data: {
@@ -64,11 +64,10 @@ export default {
     setRevs({ commit }, revs) {
       commit('SET_REVS', parseFloat(revs));
     },
-    updateData({ state, commit, rootState }) {
+    updateData({ state, commit }) {
       const x = prepareX(state);
       const y = x.map((i) => roundPower(state, i));
       commit('SET_DATA', { x, y });
-      commit('SET_POWER', roundPower(state, rootState.results.form.altitude));
     },
   },
   getters: {

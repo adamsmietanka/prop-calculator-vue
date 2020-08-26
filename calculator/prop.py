@@ -12,13 +12,13 @@ from calculator.models import PropellerMesh
 class _Prop:
 
     def __init__(self, data):
-        self.v_max = int(data['maxAirspeed'])
-        self.v_delta = int(data['stepSize'])
+        self.v_max = data['max_speed']
+        self.v_delta = data['step_size']
         self.v_prop = data['prop_speed']
         self.diameter = data['diameter']
-        self.blades_number = data['numberOfBlades']
-        # self.angle = float(data['specs'])
+        self.blades_number = data['blades']
         self.cp = data['Cp']
+        # self.angle = float(data['specs'])
         # self.v_cruise = data['specs']
         # self.min = self.get_mesh()
         self.data_cp = pd.read_csv(r'calculator/clark_3s_cp.csv')
@@ -31,7 +31,7 @@ class _Prop:
     #     return pd.read_sql(query.statement, query.session.bind)
 
     def prepare_points(self):
-        data = pd.DataFrame(np.arange(0, self.v_max + 1, self.v_delta), columns=['V'])
+        data = pd.DataFrame(np.arange(0, self.v_max * 1.2, self.v_delta), columns=['V'])
         data['J'] = np.round(data.V / (self.v_prop * self.diameter), 3)
         data['Cp'] = self.cp
         return data
@@ -61,6 +61,10 @@ class _Prop:
         chart = Chart(data=self.data_eff, points=self.points, z_col='Eff')
         return chart.draw()
 
+    def draw_angle(self):
+        chart = Chart(data=self.data_cp, points=self.points, z_col='Cp')
+        return chart.draw()
+
     def get_data(self):
         chart1 = self.draw_eff()
         chart2 = self.draw_angle()
@@ -75,10 +79,6 @@ class PropVariable(_Prop):
     def calculate(self):
         self.interpolate_angle()
         self.interpolate_eff()
-
-    def draw_angle(self):
-        chart = Chart(data=self.data_cp, points=self.points, z_col='Cp')
-        return chart.draw()
 
 
 class PropFixed(_Prop):
@@ -98,8 +98,4 @@ class PropFixed(_Prop):
                       (adv_ratio, self.angle),
                       method='linear', fill_value=0)
         return cp
-
-    def draw_angle(self):
-        chart = Chart(data=self.data_cp, points=self.points, z_col='Cp')
-        return chart.draw()
 

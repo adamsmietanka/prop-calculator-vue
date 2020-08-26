@@ -8,54 +8,30 @@
       </b-form-group>
     </b-col>
     <b-col md="6">
-      <b-form-group label="Reduction ratio">
-      <ValidationProvider name="Reduction ratio"
-                          rules="required|between:0,1" v-slot="{ errors, valid }">
-        <b-input-group append=":1">
-          <b-form-input type="number"
-                        step="0.01"
-                        v-model="ratio"
-                        @keyup="valid && setRatio($event)"
-                        @click="valid && setRatio($event)"
-                        :state="valid ? null : false"
-                        aria-describedby="error"/>
-        </b-input-group>
-        <b-form-invalid-feedback id="error">{{ errors[0] }}</b-form-invalid-feedback>
-      </ValidationProvider>
-    </b-form-group>
-    <b-form-group label="Engine speed">
-      <ValidationProvider name="Engine speed"
-                          rules="required|between:2000,7000" v-slot="{ errors, valid }">
-        <b-input-group append="rpm">
-          <b-form-input type="number"
-                        step="100"
-                        v-model="revs"
-                        @keyup="valid && setRevs($event)"
-                        @click="valid && setRevs($event)"
-                        :state="valid ? null : false"
-                        aria-describedby="error"/>
-        </b-input-group>
-        <b-form-invalid-feedback id="error">{{ errors[0] }}</b-form-invalid-feedback>
-      </ValidationProvider>
-    </b-form-group>
+    <NumberInput name="Reduction ratio"
+                 :number="engine.ratio"
+                 rules="required|between:0,1"
+                 :setter="setRatio"
+                 unit=":1"
+                 step="0.01"/>
+    <NumberInput name="Engine speed"
+                 :number="engine.revs"
+                 rules="required|between:2000,7000"
+                 :setter="setRevs"
+                 unit="rpm"
+                 step="100"/>
     </b-col>
   </b-row>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex';
+import NumberInput from '../NumberInput';
 
 export default {
   name: 'EngineFormAdd',
-  data() {
-    return {
-      ratio: 100,
-      revs: 3000,
-    };
-  },
-  created() {
-    this.ratio = this.engine.ratio;
-    this.revs = this.engine.revs;
+  components: {
+    NumberInput,
   },
   computed: {
     ...mapState({ engine: (state) => state.engine }),
@@ -70,11 +46,11 @@ export default {
     },
   },
   methods: {
-    setRatio(e) {
-      this.$store.dispatch('setRatio', e.target.value);
+    setRatio(v) {
+      this.$store.dispatch('setRatio', v);
     },
-    setRevs(e) {
-      this.$store.dispatch('setRevs', e.target.value);
+    setRevs(v) {
+      this.$store.dispatch('setRevs', v);
     },
   },
 };
@@ -87,7 +63,7 @@ export default {
 }
 
 .custom-range + .input-group-append {
-  margin-left: 0px;
+  margin-left: 0;
 }
 
 .invalid-feedback {
