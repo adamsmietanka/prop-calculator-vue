@@ -1,10 +1,10 @@
 <template>
   <b-container>
     <b-row>
-      <b-col md="4">
+      <b-col md="2">
         <ResultsForm/>
       </b-col>
-      <b-col md="4">
+      <b-col md="6">
         <ResultsTable/>
       </b-col>
       <b-col md="4">

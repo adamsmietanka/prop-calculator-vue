@@ -48,9 +48,9 @@ export default {
       return (this.engine.revs / 60) * this.engine.ratio;
     },
     tipMach() {
-      const rotation_speed = Math.PI * this.propSpeed * this.prop.diameter;
-      const forward_speed = 1.2 * this.prop.maxSpeed;
-      const a = Math.hypot(forward_speed, rotation_speed) / this.soundSpeed;
+      const rotationSpeed = Math.PI * this.propSpeed * this.prop.diameter;
+      const forwardSpeed = 1.2 * this.prop.maxSpeed;
+      const a = Math.hypot(forwardSpeed, rotationSpeed) / this.soundSpeed;
       return parseFloat(a.toFixed(3));
     },
   },

@@ -18,8 +18,8 @@ class Chart:
             opacity=0.9,
         )
         trace2 = go.Scatter3d(
-            x=self.points.J,
-            y=self.points.Angle,
+            x=self.points.j,
+            y=self.points.angle,
             z=self.points[self.z_col],
             # mode='markers',
             opacity=0.9,

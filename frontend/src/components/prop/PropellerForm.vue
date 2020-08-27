@@ -22,6 +22,11 @@
     <b-form-group label="Blade pitch">
       <b-form-radio-group v-model="bladePitch" :options="['Variable', 'Fixed']"/>
     </b-form-group>
+    <NumberInput name="Angle" v-if="bladePitch === 'Fixed'"
+                 :number="prop.angle"
+                 rules="required|between:10,60"
+                 :setter="setAngle"
+                 unit="°"/>
     <DisabledInput name="Power"
                    :model="prop.cruisePower"
                    unit="kW" />
@@ -67,8 +72,8 @@ export default {
       get() { return this.prop.diameterType; },
       set(v) {
         this.$store.dispatch('setDiameterType', v);
-        if(v === 'Optimized') {
-          const diameter = this.table.find((el) => el.Type === '3')['Diameter'];
+        if (v === 'Optimized') {
+          const diameter = this.table.find((el) => el.Type === '3').Diameter;
           this.$store.dispatch('setDiameter', diameter);
         }
       },
@@ -95,6 +100,9 @@ export default {
     },
     setCruiseAltitude(v) {
       this.$store.dispatch('setCruiseAltitude', v);
+    },
+    setAngle(v) {
+      this.$store.dispatch('setAngle', v);
     },
     update() {
       this.$store.dispatch('postPropData', {

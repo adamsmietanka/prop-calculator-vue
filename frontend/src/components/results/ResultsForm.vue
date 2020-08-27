@@ -6,8 +6,8 @@
                  :rules="rulesAltitude()"
                  :setter="setAltitude"
                  unit="km"/>
-    <b-form-group label="Step size">
-      <b-form-radio-group v-model="stepSize" :options="['5', '10', '20']"/>
+    <b-form-group label="Step size" v-if="prop.bladePitch === 'Variable'">
+      <b-form-radio-group stacked v-model="stepSize" :options="['5', '10', '20']"/>
     </b-form-group>
     <DisabledInput name="Power"
                    :model="results.power"
@@ -29,6 +29,9 @@ export default {
     NumberInput,
     DisabledInput,
   },
+  created() {
+    this.update();
+  },
   computed: {
     ...mapState({
       engine: (state) => state.engine,
@@ -43,7 +46,7 @@ export default {
       const { altitude, power } = this.results;
       const rho = 1.2255 * (1 - (altitude / 44.3)) ** 4.256;
       const Cp = (power * 1000) / (rho * this.propSpeed ** 3 * this.prop.diameter ** 5);
-      return parseFloat(Cp.toPrecision(4));
+      return parseFloat(Cp.toFixed(4));
     },
     propSpeed() {
       return (this.engine.revs / 60) * this.engine.ratio;
@@ -67,8 +70,12 @@ export default {
         step_size: this.results.stepSize,
         diameter: this.prop.diameter,
         blades: this.prop.numberOfBlades,
-        Cp: this.Cp,
+        cp: this.Cp,
         prop_speed: this.propSpeed,
+        power: this.results.power,
+        angle: this.prop.angle,
+        ratio: this.engine.ratio,
+        pitch: this.prop.bladePitch,
       });
     },
   },

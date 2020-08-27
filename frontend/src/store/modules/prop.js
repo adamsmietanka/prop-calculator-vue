@@ -12,13 +12,12 @@ export default {
       diameter: 3.2,
       numberOfBlades: 3,
       bladePitch: 'Variable',
+      angle: 30,
       bladeMaterial: 'Metal',
     },
     table: [],
     chart: {
-      data: [
-        { type: 'scatter' },
-      ],
+      data: [],
     },
   },
   mutations: {
@@ -42,6 +41,9 @@ export default {
     },
     SET_BLADE_PITCH(state, pitch) {
       state.form.bladePitch = pitch;
+    },
+    SET_ANGLE(state, angle) {
+      state.form.angle = angle;
     },
     SET_BLADE_MATERIAL(state, material) {
       state.form.bladeMaterial = material;
@@ -76,6 +78,9 @@ export default {
     setBladePitch({ commit }, pitch) {
       commit('SET_BLADE_PITCH', pitch);
     },
+    setAngle({ commit }, angle) {
+      commit('SET_ANGLE', parseFloat(angle));
+    },
     setBladeMaterial({ commit }, material) {
       commit('SET_BLADE_MATERIAL', material);
     },
@@ -84,7 +89,7 @@ export default {
         .then((res) => {
           dispatch('setPropTable', res.data.table);
           dispatch('setPropChart', res.data.chart);
-          const diameter = res.data.table.find((el) => el.Type === '3')['Diameter'];
+          const diameter = res.data.table.find((el) => el.Type === '3').Diameter;
           dispatch('setDiameter', diameter);
         }).catch((error) => console.log(error));
     },

@@ -26,7 +26,7 @@ db.init_app(app)
 def test():
     data = json.loads(request.data.decode('utf-8'))
     print(data)
-    propeller = PropVariable(data)
+    propeller = PropVariable(data) if data['pitch'] == 'Variable' else PropFixed(data)
     return propeller.get_data()
 
 

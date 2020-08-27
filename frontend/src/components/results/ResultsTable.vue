@@ -1,6 +1,6 @@
 <template>
 <div class="mt-2">
-  <b-table striped hover bordered :items="items"></b-table>
+  <b-table striped hover bordered sticky-header="850px" :items="items"/>
 </div>
 </template>
 

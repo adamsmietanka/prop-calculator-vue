@@ -78,7 +78,7 @@ export default {
       this.$store.dispatch('addStage', this.stageData());
     },
     stageData() {
-      if (this.stages == 0) {
+      if (this.stages === 0) {
         return {
           id: 0,
           startAlt: 0,

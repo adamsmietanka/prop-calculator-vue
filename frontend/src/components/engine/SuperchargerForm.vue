@@ -29,7 +29,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import NumberInput from '../NumberInput';
+import NumberInput from '../NumberInput.vue';
 
 export default {
   name: 'SuperchargerStage',
