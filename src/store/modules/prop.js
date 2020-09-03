@@ -91,7 +91,7 @@ export default {
           dispatch('setPropChart', res.data.chart);
           const row = res.data.table.find((el) => el.Type === state.form.numberOfBlades.toString());
           dispatch('setDiameter', row.Diameter);
-        }).catch((error) => console.log(error));
+        });
     },
     setPropTable({ commit }, table) {
       commit('SET_PROP_TABLE', table);

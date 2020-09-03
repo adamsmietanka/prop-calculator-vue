@@ -55,8 +55,7 @@ export default {
         .then((response) => {
           dispatch('setTable', response.data.table);
           dispatch('setCharts', response.data.charts);
-        })
-        .catch((error) => console.log(error));
+        });
     },
     setTable({ commit }, table) {
       commit('SET_TABLE', table);

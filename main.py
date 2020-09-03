@@ -10,8 +10,8 @@ from calculator.commands import create_tables
 from calculator.models import db
 
 app = Flask(__name__,
-            static_folder="frontend/dist/static",
-            template_folder="frontend/dist")
+            static_folder="dist/static",
+            template_folder="dist")
 CORS(app, resources={r'/api/*': {'origins': '*'}})
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
