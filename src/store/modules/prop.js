@@ -85,7 +85,7 @@ export default {
       commit('SET_BLADE_MATERIAL', material);
     },
     async postPropData({ dispatch, state }, data) {
-      axios.post('http://localhost:5000/api/prop', data)
+      axios.post('/api/prop', data)
         .then((res) => {
           dispatch('setPropTable', res.data.table);
           dispatch('setPropChart', res.data.chart);
