@@ -24,8 +24,5 @@ export default {
   components: {
     Header,
   },
-  created() {
-    document.title = 'Prop Calculator';
-  },
 };
 </script>

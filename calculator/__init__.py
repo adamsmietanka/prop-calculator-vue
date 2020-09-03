@@ -6,7 +6,6 @@ from dotenv import load_dotenv, find_dotenv
 
 from calculator.diameter import Diameter
 from calculator.prop import PropVariable, PropFixed
-from calculator.commands import create_tables
 from calculator.models import db
 
 load_dotenv(find_dotenv())
@@ -33,7 +32,6 @@ class Config(object):
 
 app.config.from_object('calculator.Config')
 CORS(app, resources={r'/api/*': {'origins': '*'}})
-app.cli.add_command(create_tables)
 
 db.init_app(app)
 
