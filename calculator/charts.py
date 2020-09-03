@@ -5,6 +5,7 @@ class Chart:
 
     def __init__(self, data, points, z_col):
         self.z_col = z_col
+        data = data.drop_duplicates(subset=['x', 'y'])
         self.data = data.pivot(index='y', columns='x', values='z')
         self.points = points
 

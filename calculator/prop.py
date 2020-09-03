@@ -6,7 +6,7 @@ import json
 from scipy.interpolate import griddata
 
 from calculator.charts import Chart
-from calculator.models import PropellerMesh
+from calculator.models import Mesh
 
 
 class _Prop:
@@ -16,18 +16,17 @@ class _Prop:
         self.v_delta = data['step_size']
         self.v_prop = data['prop_speed']
         self.diameter = data['diameter']
-        self.blades_number = data['blades']
+        self.blades = data['blades']
         self.cp = data['cp']
         self.power = data['power']
         self.angle = data['angle']
         self.ratio = data['ratio']
-        # self.min = self.get_mesh()
-        self.data_cp = pd.read_csv(r'calculator/clark_3s_cp.csv')
-        self.data_eff = pd.read_csv(r'calculator/clark_3s_eff.csv')
+        self.data_cp = self.get_mesh('cp')
+        self.data_eff = self.get_mesh('eff')
 
-    # def get_mesh(self):
-    #     query = PropellerMesh.query.filter(PropellerMesh.blades == self.blades_number)
-    #     return pd.read_sql(query.statement, query.session.bind)
+    def get_mesh(self, chart):
+        query = Mesh.query.filter(Mesh.blades == self.blades, Mesh.chart == chart)
+        return pd.read_sql(query.statement, query.session.bind)
 
     def prepare_points(self):
         pass

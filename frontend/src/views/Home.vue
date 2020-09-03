@@ -4,7 +4,7 @@
     <p>This is an optimisation tool for choosing the right powertrain for your aircraft</p>
     <h2>How do I start?</h2>
     <p>1. Start by calculating maximum engine performance in the <b>Engine</b> tab</p>
-    <p>2. In <b>Propeller</b> tab you can choose the right prop for your engine</p>
+    <p>2. In the <b>Propeller</b> tab you can choose the right prop for your engine</p>
     <p>3. The outcome of the calculations can be viewed in the <b>Results</b> tab</p>
   </b-container>
 </template>

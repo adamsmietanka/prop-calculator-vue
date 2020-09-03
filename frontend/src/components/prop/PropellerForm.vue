@@ -61,7 +61,10 @@ export default {
       get() { return this.prop.numberOfBlades; },
       set(v) {
         this.$store.dispatch('setNumberOfBlades', v);
-        this.update();
+        if (this.prop.diameterType === 'Optimized') {
+          const row = this.table.find((el) => el.Type === v);
+          this.$store.dispatch('setDiameter', row.Diameter);
+        }
       },
     },
     bladePitch: {
@@ -73,8 +76,9 @@ export default {
       set(v) {
         this.$store.dispatch('setDiameterType', v);
         if (v === 'Optimized') {
-          const diameter = this.table.find((el) => el.Type === '3').Diameter;
-          this.$store.dispatch('setDiameter', diameter);
+          const row = this.table.find((el) => el.Type === this.prop.numberOfBlades.toString());
+          console.log(row);
+          this.$store.dispatch('setDiameter', row.Diameter);
         }
       },
     },
@@ -96,7 +100,6 @@ export default {
   methods: {
     setMaxSpeed(v) {
       this.$store.dispatch('setMaxSpeed', v);
-      this.update();
     },
     setCruiseAltitude(v) {
       this.$store.dispatch('setCruiseAltitude', v);

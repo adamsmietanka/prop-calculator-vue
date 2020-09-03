@@ -84,13 +84,13 @@ export default {
     setBladeMaterial({ commit }, material) {
       commit('SET_BLADE_MATERIAL', material);
     },
-    async postPropData({ dispatch }, data) {
-      axios.post('http://localhost:5000/prop', data)
+    async postPropData({ dispatch, state }, data) {
+      axios.post('http://localhost:5000/api/prop', data)
         .then((res) => {
           dispatch('setPropTable', res.data.table);
           dispatch('setPropChart', res.data.chart);
-          const diameter = res.data.table.find((el) => el.Type === '3').Diameter;
-          dispatch('setDiameter', diameter);
+          const row = res.data.table.find((el) => el.Type === state.form.numberOfBlades.toString());
+          dispatch('setDiameter', row.Diameter);
         }).catch((error) => console.log(error));
     },
     setPropTable({ commit }, table) {

@@ -51,7 +51,7 @@ export default {
       commit('SET_POWER', roundPower(rootState.engine, parseFloat(altitude)));
     },
     async postData({ dispatch }, data) {
-      axios.post('http://localhost:5000/data', data)
+      axios.post('http://localhost:5000/api/data', data)
         .then((response) => {
           dispatch('setTable', response.data.table);
           dispatch('setCharts', response.data.charts);

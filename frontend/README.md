@@ -1,4 +1,6 @@
-# frontend
+# prop-calculator
+
+The Vue.js framework is used for constructing an interactive and complete single page application (SPA), while the Flask framework is used to produce data for the front-end.
 
 ## Project setup
 ```

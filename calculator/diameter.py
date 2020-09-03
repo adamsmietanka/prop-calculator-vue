@@ -7,6 +7,7 @@ import math
 import plotly.graph_objects as go
 
 from scipy.interpolate import interp1d
+from calculator.models import DiameterData
 
 
 class Diameter:
@@ -15,13 +16,18 @@ class Diameter:
         self.v_prop = data['prop_speed']
         self.v_sound = data['sound_speed']
         self.cn = data['Cn']
-        self.data = pd.read_csv(r'calculator/diameter.csv')
+        self.data = self.get_mesh()
+
+    def get_mesh(self):
+        query = DiameterData.query
+        return pd.read_sql(query.statement, query.session.bind)
 
     def points(self):
-        points = pd.DataFrame(self.data.columns[1:], columns=['Type'])
-        for i in points.Type:
-            j = interp1d(self.data.x, self.data[i])
-            points.loc[points.Type == i, 'J'] = j(self.cn)
+        points = pd.DataFrame(self.data.blades.unique(), columns=['Type'])
+        for blades in self.data.blades.unique():
+            trace = self.data[self.data.blades == blades]
+            y = interp1d(trace.x, trace.y, fill_value='extrapolate')
+            points.loc[points.Type == blades, 'J'] = y(self.cn)
         points['Diameter'] = self.v_max / (points['J'] * self.v_prop)
         points['Mach'] = np.hypot(1.2 * self.v_max, math.pi * self.v_prop * points.Diameter) / self.v_sound
         return points.round(3).to_json(orient='records')
@@ -32,14 +38,14 @@ class Diameter:
         yaxis = {'title': {'text': 'Advance Ratio (J)'}}
         return go.Layout(margin=dict(l=50, r=0, b=0, t=50),
                          width=500, height=400,
-                         legend_title_text='Data', title=title,
+                         legend_title_text='Blades', title=title,
                          xaxis=xaxis, yaxis=yaxis)
 
     def draw(self):
-        fig = go.Figure()
-        for col in self.data.columns[1:]:
-            fig.add_trace(go.Scatter(x=self.data.x, y=self.data[col], mode='lines', name=col))
-        fig.update_layout(self.layout())
+        fig = go.Figure(layout=self.layout())
+        for curve in self.data.blades.unique():
+            trace = self.data[self.data.blades == curve]
+            fig.add_trace(go.Scatter(x=trace.x, y=trace.y, mode='lines', name=curve))
         return fig
 
     def get_data(self):
