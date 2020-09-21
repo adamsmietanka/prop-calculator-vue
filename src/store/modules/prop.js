@@ -17,7 +17,10 @@ export default {
     },
     table: [],
     chart: {
-      data: [],
+      data: [
+        { type: 'surface' },
+      ],
+      layout: {},
     },
   },
   mutations: {

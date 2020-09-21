@@ -1,10 +1,13 @@
 <template>
   <b-form-group :label="name">
-    <b-input-group :append="unit">
-      <b-form-input disabled
-                    v-model="model"
-                    type="number" />
-    </b-input-group>
+    <ValidationProvider :name="name" rules="" v-slot="{ errors }" ref="input">
+      <b-input-group :append="unit">
+        <b-form-input disabled
+                      v-model="model"
+                      type="number" />
+      </b-input-group>
+      <b-form-invalid-feedback id="error">{{ errors[0] }}</b-form-invalid-feedback>
+    </ValidationProvider>
   </b-form-group>
 </template>
 
@@ -25,3 +28,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.invalid-feedback {
+  width: 100%;
+  display: block;
+}
+</style>
