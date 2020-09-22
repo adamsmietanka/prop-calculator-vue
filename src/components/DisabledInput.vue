@@ -1,6 +1,6 @@
 <template>
   <b-form-group :label="name">
-    <ValidationProvider :name="name" rules="" v-slot="{ errors }" ref="input">
+    <ValidationProvider :name="name" :rules="rules" v-slot="{ errors }" ref="input">
       <b-input-group :append="unit">
         <b-form-input disabled
                       v-model="model"
@@ -25,6 +25,18 @@ export default {
       required: false,
       default: () => '',
     },
+    rules: {
+      required: false,
+      default: () => '',
+    },
+  },
+  watch: {
+    model() {
+      this.$refs.input.validate();
+    },
+  },
+  mounted() {
+    this.$refs.input.validate();
   },
 };
 </script>

@@ -1,37 +1,23 @@
 <template>
   <div class="mt-2">
-    <DisabledInput name="Diameter" v-if="prop.diameterType === 'Optimized'"
-                   :model="prop.diameter"
-                   unit="m" />
-    <NumberInput name="Diameter" v-if="prop.diameterType === 'Manual'"
-                 :number="prop.diameter"
-                 step="0.01"
-                 rules="required|between:0.5,5"
-                 :setter="setDiameter"
-                 unit="m"/>
     <b-form-group label="Blade material">
-      <b-form-radio-group v-model="bladeMaterial" :options="['Metal', 'Wood']"/>
+      <b-form-radio-group v-model="bladeMaterial" :options="['Metal', 'Composite', 'Wood']"/>
     </b-form-group>
     <DisabledInput name="Tip Mach Number"
-                   :model="tipMach"/>
+                   :model="tipMach" :rules="rulesTip"/>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
-import NumberInput from '../NumberInput.vue';
 import DisabledInput from '../DisabledInput.vue';
 
 export default {
   name: 'PropellerFormAdd',
-  components: {
-    NumberInput,
-    DisabledInput,
-  },
+  components: { DisabledInput },
   computed: {
     ...mapState({
       prop: (state) => state.prop.form,
-      table: (state) => state.prop.table,
       engine: (state) => state.engine,
     }),
     bladeMaterial: {
@@ -53,44 +39,11 @@ export default {
       const a = Math.hypot(forwardSpeed, rotationSpeed) / this.soundSpeed;
       return parseFloat(a.toFixed(3));
     },
-  },
-  methods: {
-    setMaxSpeed(v) {
-      this.$store.dispatch('setMaxSpeed', v);
-      this.update();
-    },
-    setCruiseAltitude(v) {
-      this.$store.dispatch('setCruiseAltitude', v);
-    },
-    setDiameter(v) {
-      this.$store.dispatch('setDiameter', v);
-    },
-    update() {
-      this.$store.dispatch('postPropData', {
-        max_speed: this.prop.maxSpeed,
-        sound_speed: this.soundSpeed,
-        prop_speed: this.propSpeed,
-        Cn: this.Cn,
-      });
-    },
-    rulesAltitude() {
+    rulesTip() {
       return {
-        required: true,
-        min_value: 0,
-        max_value: this.engine.maxAltitude,
+        tip_speed: this.prop.bladeMaterial === 'Metal' ? 0.9 : 0.8,
       };
     },
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.custom-range {
-  border: none;
-  margin-left: -10px;
-}
-
-.custom-range + .input-group-append {
-  margin-left: 0;
-}
-</style>

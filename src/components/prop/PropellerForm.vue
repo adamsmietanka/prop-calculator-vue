@@ -11,9 +11,13 @@
                  :rules="rulesAltitude()"
                  :setter="setCruiseAltitude"
                  unit="km"/>
-    <b-form-group label="Diameter">
-      <b-form-radio-group v-model="diameterType" :options="['Optimized', 'Manual']" class="mb-2"/>
-    </b-form-group>
+    <ToggleableInput name="Diameter"
+                     :model="prop.diameter"
+                     :toggler="prop.diameterType"
+                     step="0.01"
+                     rules="required|between:0.5,5"
+                     :setter="setDiameter"
+                     unit="m" />
     <b-form-group label="Number of blades">
       <b-input-group :append="prop.numberOfBlades.toString()">
         <b-form-input type="range" v-model="numberOfBlades" min="2" max="4"/>
@@ -32,7 +36,7 @@
                    unit="kW" />
     <DisabledInput name="Cn"
                    :model="Cn" />
-    <b-button block variant="primary" @click="update" class="mt-2">Update</b-button>
+    <b-button block variant="primary" @click="update" class="mt-2">Optimize</b-button>
   </div>
 </template>
 
@@ -40,12 +44,14 @@
 import { mapState } from 'vuex';
 import NumberInput from '../NumberInput.vue';
 import DisabledInput from '../DisabledInput.vue';
+import ToggleableInput from '../ToggleableInput.vue';
 
 export default {
   name: 'PropellerForm',
   components: {
     NumberInput,
     DisabledInput,
+    ToggleableInput,
   },
   created() {
     this.$store.dispatch('setCruisePower', this.prop.cruiseAltitude);
@@ -61,26 +67,12 @@ export default {
       get() { return this.prop.numberOfBlades; },
       set(v) {
         this.$store.dispatch('setNumberOfBlades', v);
-        if (this.prop.diameterType === 'Optimized') {
-          const row = this.table.find((el) => el.Type === v);
-          this.$store.dispatch('setDiameter', row.Diameter);
-        }
+        this.$store.dispatch('updateDiameter', v);
       },
     },
     bladePitch: {
       get() { return this.prop.bladePitch; },
       set(v) { this.$store.dispatch('setBladePitch', v); },
-    },
-    diameterType: {
-      get() { return this.prop.diameterType; },
-      set(v) {
-        this.$store.dispatch('setDiameterType', v);
-        if (v === 'Optimized') {
-          const row = this.table.find((el) => el.Type === this.prop.numberOfBlades.toString());
-          console.log(row);
-          this.$store.dispatch('setDiameter', row.Diameter);
-        }
-      },
     },
     Cn() {
       const { cruisePower, maxSpeed } = this.prop;
@@ -103,6 +95,9 @@ export default {
     },
     setCruiseAltitude(v) {
       this.$store.dispatch('setCruiseAltitude', v);
+    },
+    setDiameter(v) {
+      this.$store.dispatch('setDiameter', v);
     },
     setAngle(v) {
       this.$store.dispatch('setAngle', v);
