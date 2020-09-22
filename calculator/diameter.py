@@ -23,14 +23,15 @@ class Diameter:
         return pd.read_sql(query.statement, query.session.bind)
 
     def points(self):
-        points = pd.DataFrame(self.data.blades.unique(), columns=['Type'])
+        points = pd.DataFrame(self.data.blades.unique(), columns=['blades'])
+        points['Cn'] = self.cn
         for blades in self.data.blades.unique():
             trace = self.data[self.data.blades == blades]
             y = interp1d(trace.x, trace.y, fill_value='extrapolate')
-            points.loc[points.Type == blades, 'J'] = y(self.cn)
-        points['Diameter'] = self.v_max / (points['J'] * self.v_prop)
-        points['Mach'] = np.hypot(1.2 * self.v_max, math.pi * self.v_prop * points.Diameter) / self.v_sound
-        return points.round(3).to_json(orient='records')
+            points.loc[points.blades == blades, 'J'] = y(self.cn)
+        points['diameter'] = self.v_max / (points.J * self.v_prop)
+        points['mach'] = np.hypot(1.2 * self.v_max, math.pi * self.v_prop * points.diameter) / self.v_sound
+        return points.round(3)
 
     def layout(self):
         title = {"text": "Maximum Efficiency Curves"}
@@ -38,18 +39,19 @@ class Diameter:
         yaxis = {'title': {'text': 'Advance Ratio (J)'}}
         return go.Layout(margin=dict(l=50, r=0, b=0, t=50),
                          width=500, height=400,
-                         legend_title_text='Blades', title=title,
+                         legend_title_text='Data', title=title,
                          xaxis=xaxis, yaxis=yaxis)
 
-    def draw(self):
+    def draw(self, points):
         fig = go.Figure(layout=self.layout())
         for curve in self.data.blades.unique():
             trace = self.data[self.data.blades == curve]
             fig.add_trace(go.Scatter(x=trace.x, y=trace.y, mode='lines', name=curve))
+        fig.add_trace(go.Scatter(x=points.Cn, y=points.J, mode='markers', name='J', marker=dict(color='gray')))
         return fig
 
     def get_data(self):
         table = self.points()
-        chart = self.draw()
+        chart = self.draw(points=table)
         data = json.dumps({'table': {}, 'chart': chart}, cls=plotly.utils.PlotlyJSONEncoder)
-        return data.replace('{}', table)
+        return data.replace('{}', table.to_json(orient='records'))

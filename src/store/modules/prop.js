@@ -5,11 +5,11 @@ export default {
   state: {
     form: {
       maxSpeed: 150,
-      cruiseSpeed: 120,
       cruiseAltitude: 3,
       cruisePower: 800,
       diameterType: 'Optimized',
       diameter: 3.2,
+      mach: 1,
       numberOfBlades: 3,
       bladePitch: 'Variable',
       angle: 30,
@@ -20,7 +20,6 @@ export default {
       data: [
         { type: 'surface' },
       ],
-      layout: {},
     },
   },
   mutations: {
@@ -38,6 +37,9 @@ export default {
     },
     SET_DIAMETER(state, diameter) {
       state.form.diameter = diameter;
+    },
+    SET_TIP_MACH(state, number) {
+      state.form.mach = number;
     },
     SET_NUMBER_OF_BLADES(state, val) {
       state.form.numberOfBlades = val;
@@ -75,6 +77,9 @@ export default {
     setDiameter({ commit }, diameter) {
       commit('SET_DIAMETER', parseFloat(diameter));
     },
+    setTipMach({ commit }, number) {
+      commit('SET_TIP_MACH', parseFloat(number));
+    },
     setNumberOfBlades({ commit }, val) {
       commit('SET_NUMBER_OF_BLADES', parseFloat(val));
     },
@@ -92,13 +97,15 @@ export default {
         .then((res) => {
           dispatch('setPropTable', res.data.table);
           dispatch('setPropChart', res.data.chart);
-          dispatch('updateDiameter');
+          dispatch('setDiameterType', 'Optimized');
+          dispatch('updatePropeller');
         });
     },
-    updateDiameter({ dispatch, state }) {
-      const row = state.table.find((el) => el.Type === state.form.numberOfBlades.toString());
+    updatePropeller({ dispatch, state }) {
+      const row = state.table.find((el) => el.blades === state.form.numberOfBlades.toString());
       if (state.form.diameterType === 'Optimized') {
-        dispatch('setDiameter', row.Diameter);
+        dispatch('setDiameter', row.diameter);
+        dispatch('setTipMach', row.mach);
       }
     },
     setPropTable({ commit }, table) {

@@ -34,10 +34,13 @@ export default {
       return (this.engine.revs / 60) * this.engine.ratio;
     },
     tipMach() {
-      const rotationSpeed = Math.PI * this.propSpeed * this.prop.diameter;
-      const forwardSpeed = 1.2 * this.prop.maxSpeed;
-      const a = Math.hypot(forwardSpeed, rotationSpeed) / this.soundSpeed;
-      return parseFloat(a.toFixed(3));
+      if (this.prop.diameterType === 'Manual') {
+        const rotationSpeed = Math.PI * this.propSpeed * this.prop.diameter;
+        const forwardSpeed = 1.2 * this.prop.maxSpeed;
+        const a = Math.hypot(forwardSpeed, rotationSpeed) / this.soundSpeed;
+        return parseFloat(a.toFixed(3));
+      }
+      return this.prop.mach;
     },
     rulesTip() {
       return {

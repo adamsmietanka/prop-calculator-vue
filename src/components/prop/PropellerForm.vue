@@ -36,7 +36,7 @@
                    unit="kW" />
     <DisabledInput name="Cn"
                    :model="Cn" />
-    <b-button block variant="primary" @click="update" class="mt-2">Optimize</b-button>
+    <b-button block variant="primary" @click="update" class="mt-2">Optimize Diameter</b-button>
   </div>
 </template>
 
@@ -67,7 +67,7 @@ export default {
       get() { return this.prop.numberOfBlades; },
       set(v) {
         this.$store.dispatch('setNumberOfBlades', v);
-        this.$store.dispatch('updateDiameter', v);
+        this.$store.dispatch('updatePropeller', v);
       },
     },
     bladePitch: {

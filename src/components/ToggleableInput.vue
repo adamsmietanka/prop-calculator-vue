@@ -63,7 +63,7 @@ export default {
       get() { return this.toggler; },
       set(v) {
         this.$store.dispatch('setDiameterType', v);
-        this.$store.dispatch('updateDiameter', v);
+        this.$store.dispatch('updatePropeller');
         if (v === 'Manual') {
           this.value = this.model;
         }
