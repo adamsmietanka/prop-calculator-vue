@@ -17,17 +17,27 @@ class Chart:
             showscale=False,
             colorscale='algae',
             opacity=0.9,
+            reversescale=True,
+            hovertemplate=
+            '<b>J</b>: %{x}<br>' +
+            '<b>Angle</b>: %{y}°<br>' +
+            '<b>{}</b>: '.format(self.z_col.capitalize()) +
+            '%{z}<extra></extra>',
         )
         trace2 = go.Scatter3d(
             x=self.points.j,
             y=self.points.angle,
             z=self.points[self.z_col],
-            # mode='markers',
-            opacity=0.9,
+            opacity=0.75,
             marker=dict(
-                size=5,
-                color='aliceblue',
+                size=6,
+                color='#0275d8',
             ),
+            hovertemplate=
+            '<b>J</b>: %{x}<br>' +
+            '<b>Angle</b>: %{y}°<br>' +
+            '<b>{}</b>: '.format(self.z_col.capitalize()) +
+            '%{z}<extra></extra>',
         )
         fig = go.Figure(data=[trace1, trace2])
         return fig
