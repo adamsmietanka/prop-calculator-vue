@@ -8,6 +8,9 @@ export default {
       altitude: 0,
       power: 800,
     },
+    hovered: {
+      color: [],
+    },
     table: [],
     charts: {
       eff: {
@@ -38,6 +41,9 @@ export default {
     SET_CHARTS(state, charts) {
       state.charts = charts;
     },
+    SET_HOVERED(state, color) {
+      state.hovered.color = color;
+    },
   },
   actions: {
     setStepSize({ commit }, step) {
@@ -62,6 +68,9 @@ export default {
     },
     setCharts({ commit }, charts) {
       commit('SET_CHARTS', charts);
+    },
+    setHovered({ commit }, color) {
+      commit('SET_HOVERED', color);
     },
   },
 };

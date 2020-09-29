@@ -7,7 +7,7 @@
                  :setter="setAltitude"
                  unit="km"/>
     <b-form-group label="Step size" v-if="prop.bladePitch === 'Variable'">
-      <b-form-radio-group stacked v-model="stepSize" :options="['1', '5', '10', '20']"/>
+      <b-form-radio-group stacked v-model="stepSize" :options="['2.5', '5', '10', '20']"/>
     </b-form-group>
     <DisabledInput name="Power"
                    :model="results.power"

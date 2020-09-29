@@ -28,10 +28,13 @@ class Chart:
             x=self.points.j,
             y=self.points.angle,
             z=self.points[self.z_col],
-            opacity=0.75,
+            opacity=0.9,
             marker=dict(
                 size=6,
-                color='#0275d8',
+                color=['#0275d8' for i in self.points.j],
+            ),
+            line=dict(
+                color='#0275d8'
             ),
             hovertemplate=
             '<b>J</b>: %{x}<br>' +
