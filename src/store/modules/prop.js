@@ -97,7 +97,6 @@ export default {
         .then((res) => {
           dispatch('setPropTable', res.data.table);
           dispatch('setPropChart', res.data.chart);
-          dispatch('setDiameterType', 'Optimized');
           dispatch('updatePropeller');
         });
     },
