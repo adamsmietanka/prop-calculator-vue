@@ -8,7 +8,7 @@ export default {
       cruiseAltitude: 3,
       cruisePower: 800,
       diameterType: 'Optimized',
-      diameter: 3.2,
+      diameter: 3.902,
       mach: 1,
       numberOfBlades: 3,
       bladePitch: 'Variable',

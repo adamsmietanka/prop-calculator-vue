@@ -74,5 +74,8 @@ export default {
     maxAltUnits(state) {
       return state.maxAltitude.toString().concat(' km');
     },
+    k(state) {
+      return state.k.toFixed(2);
+    },
   },
 };

@@ -1,5 +1,5 @@
 <template>
-  <b-container>
+  <b-container class="mt-3">
     <b-row>
       <b-col md="4">
         <EngineForm/>
@@ -27,3 +27,16 @@ export default {
   },
 };
 </script>
+
+.form-group {
+    margin-bottom: 1rem;
+}
+<style lang="scss">
+.form-group {
+    margin-bottom: 0.5rem;
+}
+
+.card-body {
+  padding: 0.75rem 1rem;
+}
+</style>

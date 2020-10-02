@@ -3,7 +3,7 @@
     <ValidationProvider :name="name" :rules="rules" v-slot="{ errors }" ref="input">
       <b-input-group :size="size" :append="unit">
         <b-form-input type="number"
-                      :step="step"
+                      :step="stepSize"
                       :size="size"
                       v-model="value"
                       aria-describedby="error"/>
@@ -43,6 +43,11 @@ export default {
     cols: {
       required: false,
       default: () => 0,
+    },
+  },
+  computed: {
+    stepSize() {
+      return parseFloat(this.value) >= 400 ? 10 : this.step;
     },
   },
   data() {

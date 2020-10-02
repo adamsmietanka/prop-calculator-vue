@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-2">
+  <div>
     <NumberInput name="Altitude"
                  :number="results.altitude"
                  step="0.1"

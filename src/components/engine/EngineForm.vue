@@ -1,15 +1,20 @@
 <template>
-  <div class="engine-form mt-2">
+  <div class="engine-form">
     <NumberInput name="SL Power"
                  :number="engine.SLPower"
                  rules="required|between:100,10000"
                  :setter="setSLPower"
                  unit="kW"/>
+    <b-form-group label="Max altitude">
+      <b-input-group :append="maxAltUnits">
+        <b-form-input type="range" v-model="maxAltitude" min="10" max="15"/>
+      </b-input-group>
+    </b-form-group>
     <b-form-group label="Engine type">
       <b-form-radio-group v-model="engineType" :options="['Piston', 'Turbine']"/>
     </b-form-group>
     <b-form-group label="K coefficient" v-show="engineType === 'Piston'">
-      <b-input-group :append="engine.k.toString()">
+      <b-input-group :append="k">
         <b-form-input type="range"
                       v-model="kCoefficient"
                       min="0.08"
@@ -21,7 +26,7 @@
       <SuperchargerForm v-for="(stage, index) in this.engine.supercharger"
                          :key="stage.id"
                          :index="index"/>
-      <b-button :disabled="engine.turbocharger.enabled || stages === 2"
+      <b-button :disabled="stages === 2"
                 variant="primary"
                 @click="addStage" >
         {{ stages ? 'Add Speed' : 'Add Stage' }}
@@ -33,10 +38,10 @@
       </b-button>
     </b-form-group>
     <b-form-group label="Turbocharger" v-show="engineType === 'Piston'">
-      <b-button :disabled="stages > 0" :pressed.sync="turbo" v-model="turbo" variant="primary">
+      <Turbocharger v-show="turbo"/>
+      <b-button :pressed.sync="turbo" v-model="turbo" variant="primary">
         {{ turbo ? 'Remove' : 'Add' }}
       </b-button>
-      <Turbocharger v-show="turbo"/>
     </b-form-group>
   </div>
 </template>
@@ -56,7 +61,11 @@ export default {
   },
   computed: {
     ...mapState({ engine: (state) => state.engine }),
-    ...mapGetters(['stages', 'lastStage']),
+    ...mapGetters(['stages', 'lastStage', 'maxAltUnits', 'k']),
+    maxAltitude: {
+      get() { return this.engine.maxAltitude; },
+      set(v) { this.$store.dispatch('setMaxAlt', v); },
+    },
     kCoefficient: {
       get() { return this.engine.k; },
       set(v) { this.$store.dispatch('setK', v); },

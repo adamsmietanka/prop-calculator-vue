@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { curvePower } from './helpers';
+import { curvePower, powerTurbocharged } from './helpers';
 
 export default {
   state: [
@@ -53,7 +53,9 @@ export default {
         let startPower = rootState.engine.SLPower;
         if (index === 1) {
           const { endAlt, endPower } = rootState.engine.supercharger[0];
-          startPower = curvePower(endAlt, endPower, stage.startAlt, rootState.engine.k);
+          const turbo = powerTurbocharged(rootState.engine, stage.startAlt);
+          const compressor = curvePower(endAlt, endPower, stage.startAlt, rootState.engine.k);
+          startPower = Math.max(turbo, compressor);
         }
         stage.startPower = startPower;
         commit('UPDATE_STAGE', { id: index, stage });

@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-2">
+  <div>
     <NumberInput name="Max airspeed"
                  :number="prop.maxSpeed"
                  rules="required|between:50,200"

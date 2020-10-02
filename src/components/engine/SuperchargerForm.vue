@@ -3,7 +3,7 @@
     <b-form-group :label="index ? 'Full Speed' : 'Half Speed'" label-class="font-weight-bold"/>
     <NumberInput name="Start altitude" v-if="index"
                  :number="stage[index].startAlt"
-                 :rules="rulesStart()"
+                 :rules="rulesStart"
                  :setter="setStartAlt"
                  step="0.1"
                  unit="km"
@@ -11,7 +11,7 @@
                  cols="4"/>
     <NumberInput name="End altitude"
                  :number="stage[index].endAlt"
-                 :rules="rulesEnd()"
+                 :rules="rulesEnd"
                  :setter="setEndAlt"
                  step="0.1"
                  unit="km"
@@ -19,7 +19,7 @@
                  cols="4"/>
     <NumberInput name="End power"
                  :number="stage[index].endPower"
-                 :rules="rulesEndPower()"
+                 :rules="rulesEndPower"
                  :setter="setEndPower"
                  unit="kW"
                  size="sm"
@@ -45,6 +45,27 @@ export default {
     ...mapGetters(['stages']),
     isFirstStage() { return this.index === 0; },
     isLastStage() { return this.index + 1 === this.stages; },
+    rulesStart() {
+      return {
+        required: true,
+        min_value: this.stage[this.index - 1].endAlt,
+        max_value: this.stage[this.index].endAlt - 0.5,
+      };
+    },
+    rulesEnd() {
+      return {
+        required: true,
+        min_value: this.stage[this.index].startAlt + 0.5,
+        max_value: this.isLastStage ? this.engine.maxAltitude : this.stage[this.index + 1].startAlt,
+      };
+    },
+    rulesEndPower() {
+      return {
+        required: true,
+        min_value: this.stage[this.index].startPower,
+        max_value: this.stage[this.index].startPower * 1.5,
+      };
+    },
   },
   methods: {
     setStartAlt(v) {
@@ -55,27 +76,6 @@ export default {
     },
     setEndPower(v) {
       this.$store.dispatch('setEndPower', { val: v, id: this.index });
-    },
-    rulesStart() {
-      return {
-        required: true,
-        min_value: this.isFirstStage ? 0 : this.stage[this.index - 1].endAlt,
-        max_value: this.stage[this.index].endAlt,
-      };
-    },
-    rulesEnd() {
-      return {
-        required: true,
-        min_value: this.stage[this.index].startAlt,
-        max_value: this.isLastStage ? this.engine.maxAltitude : this.stage[this.index + 1].startAlt,
-      };
-    },
-    rulesEndPower() {
-      return {
-        required: true,
-        min_value: this.stage[this.index].startPower,
-        max_value: this.stage[this.index].startPower * 1.5,
-      };
     },
   },
 };

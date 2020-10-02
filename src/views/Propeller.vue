@@ -1,5 +1,5 @@
 <template>
-  <b-container>
+  <b-container class="mt-3">
     <b-row>
       <b-col md="4">
         <PropellerForm/>
