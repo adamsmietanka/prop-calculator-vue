@@ -21,7 +21,7 @@
         <div class="col-6 col-md">
           <h5>Contact</h5>
           <ul class="list-unstyled text-small">
-            <li><a class="text-muted" href="https://github.com/adamsmietanka/prop-calculator/tree/frontend-heroku" target="_blank">GitHub</a></li>
+            <li><a class="text-muted" href="https://github.com/adamsmietanka/prop-calculator-vue" target="_blank">GitHub</a></li>
             <li><a class="text-muted" href="https://www.linkedin.com/in/adam-smietanka/" target="_blank">LinkedIn</a></li>
           </ul>
         </div>
