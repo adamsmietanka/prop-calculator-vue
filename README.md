@@ -6,8 +6,11 @@ The user interface functions have been divided into three interdependent tabs.
 The input data has been grouped into the **Engine** and **Propeller** tabs, and the calculation results can be viewed in the **Results** tab.
 
 ### Designing the engine performance
-The user has full freedom to choose the type and method of powering the drive unit. 
+The user can model the engine power curve exactly as he wants.
+There are countless configurations, ranging from **turbine to twincharged piston engines**.
+The user has freedom to choose the forced induction method, but natural aspiration is also possible.
 All key engine data has been grouped in this module.
+
 <img src="https://github.com/adamsmietanka/propeller-mesher/blob/master/docs/images/app_engine.png" align=middle/>
 
 The Engine tab consists of three elements. 
@@ -33,10 +36,15 @@ In the range of transonic velocities, the drag coefficient increases significant
 ### Visualizing the results
 The first text field specifies the altitude for which the aircraft performance is calculated. 
 As in the previous tab, it affects the engine power displayed below.
+The results are clearly presented on the graphs and in the form of a table.
 
 <img src="https://github.com/adamsmietanka/propeller-mesher/blob/master/docs/images/app.png" align=middle/>
 
-## Preparing the data
+Thanks to the modular architecture and easy access to data, the application can easily be extended with additional tabs. 
+A possible development path is **creating a program supporting the whole aircraft design process**. 
+This application is its first completed module.
+
+### Preparing the data
 The mesh preparation process is explained [here](https://github.com/adamsmietanka/propeller-mesher#propeller-chart-meshing-toolkit).
 
 ## Getting started
