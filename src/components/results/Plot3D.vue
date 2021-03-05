@@ -4,7 +4,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import Plotly from 'plotly.js-dist';
+import Plotly from 'plotly.js-gl3d-dist-min';
 
 export default {
   name: 'Plot3D',

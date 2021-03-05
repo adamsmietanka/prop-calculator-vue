@@ -1,11 +1,11 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
-import Engine from '../views/Engine.vue';
-import Propeller from '../views/Propeller.vue';
-import Results from '../views/Results.vue';
 
 Vue.use(VueRouter);
+const Engine = () => import('../views/Engine.vue')
+const Propeller = () => import('../views/Propeller.vue')
+const Results = () => import('../views/Results.vue')
 
 const routes = [
   {
