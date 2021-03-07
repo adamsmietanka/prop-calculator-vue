@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Header />
+    <Navigation />
     <router-view />
   </div>
 </template>
@@ -16,12 +16,12 @@
 }
 </style>
 <script>
-import Header from './components/layout/Header.vue';
+import Navigation from './components/layout/Navigation.vue';
 
 export default {
   name: 'app',
   components: {
-    Header,
+    Navigation,
   },
 };
 </script>
