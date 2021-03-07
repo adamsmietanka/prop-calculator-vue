@@ -11,39 +11,45 @@ export default {
   props: ['id'],
   computed: {
     ...mapState({ results: (state) => state.results }),
-    color() { return this.results.hovered.color; },
-    data() { return this.results.charts[this.id].data; },
+    color() {
+      return this.results.hovered.color;
+    },
+    data() {
+      return this.results.charts[this.id].data;
+    },
   },
   mounted() {
-    Plotly.plot(this.$refs[this.id], this.data, this.layout, { displayModeBar: false });
+    Plotly.plot(this.$refs[this.id], this.data, this.layout, {
+      displayModeBar: false,
+    });
   },
   watch: {
     data() {
-      Plotly.react(
-        this.$refs[this.id],
-        this.data,
-        this.layout,
-      );
+      Plotly.react(this.$refs[this.id], this.data, this.layout);
     },
     color() {
-      Plotly.animate(this.$refs[this.id], {
-        data: [{ 'marker.color': this.color }],
-        traces: [1],
-      }, {
-        transition: {
-          duration: 0,
+      Plotly.animate(
+        this.$refs[this.id],
+        {
+          data: [{ 'marker.color': this.color }],
+          traces: [1],
         },
-        frame: {
-          duration: 0,
-        },
-      });
+        {
+          transition: {
+            duration: 0,
+          },
+          frame: {
+            duration: 0,
+          },
+        }
+      );
     },
   },
   data() {
     return {
       layout: {
-        height: 400,
-        width: 500,
+        height: window.innerWidth > 960 ? 400 : window.innerHeight * 0.35,
+        width: window.innerWidth > 960 ? 500 : window.innerWidth * 0.9,
         margin: {
           l: 0,
           r: 0,
