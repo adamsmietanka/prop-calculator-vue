@@ -1,7 +1,5 @@
 <template>
-  <b-container>
-    <div id="engine" />
-  </b-container>
+  <div id="engine" />
 </template>
 
 <script>
@@ -22,8 +20,17 @@ export default {
       return {
         title: 'Engine performance',
         font: { size: 18 },
+        height: window.innerWidth > 960 ? 600 : window.innerHeight * 0.5,
+        width: window.innerWidth > 960 ? 600 : window.innerWidth * 0.9,
+        margin: {
+          l: 65,
+          r: 10,
+          b: 100,
+          t: 100,
+          pad: 4,
+        },
         yaxis: {
-          range: [0, Math.max(...this.engine.data.y) * 1.1],
+          range: [0, Math.max(...this.engine.data.y) * 1.01],
           title: {
             text: 'Engine Power [kW]',
             font: { size: 16 },
@@ -63,3 +70,10 @@ export default {
   },
 };
 </script>
+<style scoped>
+@media screen and (max-width: 960px) {
+  #engine {
+    margin-left: -1rem;
+  }
+}
+</style>
