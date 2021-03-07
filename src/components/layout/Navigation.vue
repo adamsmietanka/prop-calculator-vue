@@ -118,7 +118,7 @@ span {
     width: 4rem;
     height: 4rem;
     border-radius: 0 0rem 2.5rem 0rem;
-    opacity: 80%;
+    opacity: 0.8;
     font-size: 1.5rem;
     cursor: pointer;
     color: black;
