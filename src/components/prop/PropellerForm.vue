@@ -36,6 +36,11 @@
                    unit="kW" />
     <DisabledInput name="Cn"
                    :model="Cn" />
+    <b-form-group label="Blade material">
+      <b-form-radio-group v-model="bladeMaterial" :options="['Metal', 'Composite', 'Wood']"/>
+    </b-form-group>
+    <DisabledInput name="Tip Mach Number"
+                   :model="tipMach" :rules="rulesTip"/>
     <b-button block variant="primary" @click="update" class="mt-2">Optimize Diameter</b-button>
   </div>
 </template>
@@ -70,6 +75,10 @@ export default {
         this.$store.dispatch('updatePropeller', v);
       },
     },
+    bladeMaterial: {
+      get() { return this.prop.bladeMaterial; },
+      set(v) { this.$store.dispatch('setBladeMaterial', v); },
+    },
     bladePitch: {
       get() { return this.prop.bladePitch; },
       set(v) { this.$store.dispatch('setBladePitch', v); },
@@ -87,6 +96,20 @@ export default {
     },
     propSpeed() {
       return (this.engine.revs / 60) * this.engine.ratio;
+    },
+    tipMach() {
+      if (this.prop.diameterType === 'Manual') {
+        const rotationSpeed = Math.PI * this.propSpeed * this.prop.diameter;
+        const forwardSpeed = 1.2 * this.prop.maxSpeed;
+        const a = Math.hypot(forwardSpeed, rotationSpeed) / this.soundSpeed;
+        return parseFloat(a.toFixed(3));
+      }
+      return this.prop.mach;
+    },
+    rulesTip() {
+      return {
+        tip_speed: this.prop.bladeMaterial === 'Metal' ? 0.9 : 0.8,
+      };
     },
   },
   methods: {
