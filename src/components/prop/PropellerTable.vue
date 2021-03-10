@@ -1,6 +1,6 @@
 <template>
 <div class="mt-2">
-  <b-table striped hover bordered :items="items"></b-table>
+  <b-table hover bordered head-variant="light" :items="items"></b-table>
 </div>
 </template>
 

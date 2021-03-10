@@ -1,9 +1,14 @@
 <template>
-  <div class="mt-2">
-    <b-table striped hover bordered sticky-header="850px"
-             :items="results.table"
-             @row-hovered="rowHovered"
-             @row-unhovered="rowUnhovered"/>
+  <div class="mt-2" id="custom">
+    <b-table
+      head-variant="light"
+      hover
+      bordered
+      sticky-header="850px"
+      :items="results.table"
+      @row-hovered="rowHovered"
+      @row-unhovered="rowUnhovered"
+    />
   </div>
 </template>
 
