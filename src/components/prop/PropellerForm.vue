@@ -72,7 +72,6 @@ export default {
       get() { return this.prop.numberOfBlades; },
       set(v) {
         this.$store.dispatch('setNumberOfBlades', v);
-        this.$store.dispatch('updatePropeller', v);
       },
     },
     bladeMaterial: {

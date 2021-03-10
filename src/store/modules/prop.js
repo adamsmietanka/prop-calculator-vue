@@ -71,8 +71,11 @@ export default {
     setCruisePower({ commit, rootState }, altitude) {
       commit('SET_CRUISE_POWER', roundPower(rootState.engine, parseFloat(altitude)));
     },
-    setDiameterType({ commit }, diameter) {
+    setDiameterType({ commit, dispatch, state }, diameter) {
       commit('SET_DIAMETER_TYPE', diameter);
+      if (diameter === 'Optimized') {
+        dispatch('updatePropeller', state.table);
+      }
     },
     setDiameter({ commit }, diameter) {
       commit('SET_DIAMETER', parseFloat(diameter));
@@ -80,8 +83,9 @@ export default {
     setTipMach({ commit }, number) {
       commit('SET_TIP_MACH', parseFloat(number));
     },
-    setNumberOfBlades({ commit }, val) {
+    setNumberOfBlades({ commit, dispatch, state }, val) {
       commit('SET_NUMBER_OF_BLADES', parseFloat(val));
+      dispatch('updatePropeller', state.table);
     },
     setBladePitch({ commit }, pitch) {
       commit('SET_BLADE_PITCH', pitch);
@@ -97,15 +101,14 @@ export default {
         .then((res) => {
           dispatch('setPropTable', res.data.table);
           dispatch('setPropChart', res.data.chart);
-          dispatch('updatePropeller');
+          dispatch('updatePropeller', res.data.table);
+          dispatch('setDiameterType', 'Optimized');
         });
     },
-    updatePropeller({ dispatch, state }) {
-      const row = state.table.find((el) => el.blades === state.form.numberOfBlades.toString());
-      if (state.form.diameterType === 'Optimized') {
-        dispatch('setDiameter', row.diameter);
-        dispatch('setTipMach', row.mach);
-      }
+    updatePropeller({ dispatch, state }, table) {
+      const row = table.find(({ blades }) => blades === state.form.numberOfBlades.toString());
+      dispatch('setDiameter', row.diameter);
+      dispatch('setTipMach', row.mach);
     },
     setPropTable({ commit }, table) {
       commit('SET_PROP_TABLE', table);
