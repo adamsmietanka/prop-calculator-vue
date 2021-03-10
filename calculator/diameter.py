@@ -33,17 +33,8 @@ class Diameter:
         points['mach'] = np.hypot(1.2 * self.v_max, math.pi * self.v_prop * points.diameter) / self.v_sound
         return points.round(3)
 
-    def layout(self):
-        title = {"text": "Maximum Efficiency Curves"}
-        xaxis = {'title': {'text': 'Cn'}}
-        yaxis = {'title': {'text': 'Advance Ratio (J)'}}
-        return go.Layout(margin=dict(l=50, r=0, b=0, t=50),
-                         width=500, height=400,
-                         legend_title_text='Data', title=title,
-                         xaxis=xaxis, yaxis=yaxis)
-
     def draw(self, points):
-        fig = go.Figure(layout=self.layout())
+        fig = go.Figure()
         for curve in self.data.blades.unique():
             trace = self.data[self.data.blades == curve]
             fig.add_trace(go.Scatter(x=trace.x, y=trace.y, mode='lines', name=curve))
