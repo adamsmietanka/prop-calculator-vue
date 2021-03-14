@@ -29,7 +29,7 @@ export default {
   computed: {
     ...mapState({ prop: (state) => state.prop }),
     data() {
-      return this.prop.chart.data;
+      return this.prop.chart;
     },
     layout() {
       return {

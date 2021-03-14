@@ -56,10 +56,15 @@ export default {
     setPower({ commit, rootState }, altitude) {
       commit('SET_POWER', roundPower(rootState.engine, parseFloat(altitude)));
     },
-    async postData({ dispatch }, data) {
-      axios.post('/api/data', data)
+    async postData({ dispatch }, params) {
+      axios.get('https://k2yzx7le7i.execute-api.eu-central-1.amazonaws.com/dev/prop_results_variable', { params })
+      .then((res) => {
+        let data = JSON.stringify(res.data, (_key, val) => val.toFixed ? Number(val.toPrecision(4)) : val);
+        data = JSON.parse(data)
+        dispatch('setTable', data.Table);
+      });
+      axios.post('/api/data', params)
         .then((response) => {
-          dispatch('setTable', response.data.table);
           dispatch('setCharts', response.data.charts);
         });
     },

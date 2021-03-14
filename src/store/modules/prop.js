@@ -96,23 +96,21 @@ export default {
     setBladeMaterial({ commit }, material) {
       commit('SET_BLADE_MATERIAL', material);
     },
-    async postPropData({ dispatch }, data) {
-      axios.get('https://1uvcjdfuz3.execute-api.eu-central-1.amazonaws.com/dev/diameter', {params: data})
+    async postPropData({ dispatch }, params) {
+      axios.get('https://1uvcjdfuz3.execute-api.eu-central-1.amazonaws.com/dev/diameter', { params })
       .then((res) => {
-        const table = JSON.stringify(res.data, (_key, val) => val.toFixed ? Number(val.toFixed(3)) : val);
-        dispatch('setPropTable', JSON.parse(table));
-        dispatch('updatePropeller', JSON.parse(table));
+        let data = JSON.stringify(res.data, (_key, val) => val.toFixed ? Number(val.toFixed(3)) : val);
+        data = JSON.parse(data)
+        dispatch('setPropTable', data.table);
+        dispatch('setPropChart', data.chart);
+        dispatch('updatePropeller', data.table);
         dispatch('setDiameterType', 'Optimized');
       });
-      axios.post('/api/prop', data)
-        .then((res) => {
-          dispatch('setPropChart', res.data.chart);
-        });
     },
     updatePropeller({ dispatch, state }, table) {
-      const row = table.find(({ Blades }) => Blades === state.form.numberOfBlades.toString());
-      dispatch('setDiameter', row.Diameter);
-      dispatch('setTipMach', row.Mach);
+      const row = table.find(({ blades }) => blades === state.form.numberOfBlades.toString());
+      dispatch('setDiameter', row.diameter);
+      dispatch('setTipMach', row.mach);
     },
     setPropTable({ commit }, table) {
       commit('SET_PROP_TABLE', table);
