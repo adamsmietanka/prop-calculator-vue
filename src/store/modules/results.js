@@ -61,7 +61,7 @@ export default {
       .then((res) => {
         let data = JSON.stringify(res.data, (_key, val) => val.toFixed ? Number(val.toPrecision(4)) : val);
         data = JSON.parse(data)
-        dispatch('setTable', data.Table);
+        dispatch('setTable', data.table);
       });
       axios.post('/api/data', params)
         .then((response) => {
