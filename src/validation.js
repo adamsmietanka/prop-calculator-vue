@@ -42,4 +42,9 @@ extend('tip_speed', {
   message: 'Max Mach number of the tip for this type of propeller is {max}',
 });
 
+extend('prop_angle', {
+  ...min_value,
+  message: 'This angle is not suitable for this engine and propeller',
+});
+
 Vue.component('ValidationProvider', ValidationProvider);

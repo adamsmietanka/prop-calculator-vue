@@ -6,6 +6,11 @@
                  :rules="rulesAltitude()"
                  :setter="setAltitude"
                  unit="km"/>
+    <NumberInput name="Angle" v-if="prop.bladePitch === 'Fixed'"
+                 :number="prop.angle"
+                 :rules="rulesAngle()"
+                 :setter="setAngle"
+                 unit="°"/>
     <b-form-group label="Step size" v-if="prop.bladePitch === 'Variable'">
       <b-form-radio-group stacked v-model="stepSize" :options="['2.5', '5', '10', '20']"/>
     </b-form-group>
@@ -37,6 +42,7 @@ export default {
       engine: (state) => state.engine,
       prop: (state) => state.prop.form,
       results: (state) => state.results.form,
+      table: (state) => state.results.table,
     }),
     stepSize: {
       get() { return this.results.stepSize; },
@@ -62,6 +68,17 @@ export default {
         min_value: 0,
         max_value: this.engine.maxAltitude,
       };
+    },
+    rulesAngle() {
+      return {
+        required: true,
+        min_value: 10,
+        prop_angle: this.table[1].J === 0 ? this.table[1].Angle + 1 : 10,
+        max_value: 60,
+      };
+    },
+    setAngle(v) {
+      this.$store.dispatch('setAngle', v);
     },
     update() {
       this.$store.dispatch('setPower', this.results.altitude);
