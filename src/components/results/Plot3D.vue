@@ -11,38 +11,13 @@ export default {
   props: ['id'],
   computed: {
     ...mapState({ results: (state) => state.results }),
-    color() {
-      return this.results.hovered.color;
-    },
     data() {
-      return this.results.charts[this.id].data;
+      return this.results.charts[this.id];
     },
-  },
-  mounted() {
-    Plotly.plot(this.$refs[this.id], this.data, this.layout, {
-      displayModeBar: false,
-    });
   },
   watch: {
     data() {
       Plotly.react(this.$refs[this.id], this.data, this.layout);
-    },
-    color() {
-      Plotly.animate(
-        this.$refs[this.id],
-        {
-          data: [{ 'marker.color': this.color }],
-          traces: [1],
-        },
-        {
-          transition: {
-            duration: 0,
-          },
-          frame: {
-            duration: 0,
-          },
-        }
-      );
     },
   },
   data() {

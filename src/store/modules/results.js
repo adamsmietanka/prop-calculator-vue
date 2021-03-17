@@ -12,18 +12,7 @@ export default {
       color: [],
     },
     table: [],
-    charts: {
-      eff: {
-        data: [
-          { type: 'surface' },
-        ],
-      },
-      cp: {
-        data: [
-          { type: 'surface' },
-        ],
-      },
-    },
+    charts: {},
   },
   mutations: {
     SET_STEP_SIZE(state, step) {
@@ -40,9 +29,6 @@ export default {
     },
     SET_CHARTS(state, charts) {
       state.charts = charts;
-    },
-    SET_HOVERED(state, color) {
-      state.hovered.color = color;
     },
   },
   actions: {
@@ -73,9 +59,6 @@ export default {
     },
     setCharts({ commit }, charts) {
       commit('SET_CHARTS', charts);
-    },
-    setHovered({ commit }, color) {
-      commit('SET_HOVERED', color);
     },
   },
 };
