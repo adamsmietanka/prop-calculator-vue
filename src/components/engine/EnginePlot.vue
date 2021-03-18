@@ -51,6 +51,10 @@ export default {
         scrollZoom: false,
         responsive: true,
         modeBarButtons: [['toImage']],
+        toImageButtonOptions: {
+          format: 'png',
+          filename: 'engine_power',
+        },
       };
     },
   },

@@ -14,10 +14,23 @@ export default {
     data() {
       return this.results.charts[this.id];
     },
+    options() {
+      return {
+        responsive: true,
+        modeBarButtons: [['toImage']],
+        toImageButtonOptions: {
+          format: 'png',
+          filename: `${this.id}_chart`,
+        },
+      };
+    },
+  },
+  mounted() {
+    Plotly.plot(this.$refs[this.id], this.data, this.layout, this.options);
   },
   watch: {
     data() {
-      Plotly.react(this.$refs[this.id], this.data, this.layout);
+      Plotly.react(this.$refs[this.id], this.data, this.layout, this.options);
     },
   },
   data() {

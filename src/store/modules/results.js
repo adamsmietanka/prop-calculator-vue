@@ -9,7 +9,18 @@ export default {
       power: 800,
     },
     table: [],
-    charts: {},
+    charts: {
+      eff: {
+        data: [
+          { type: 'surface' },
+        ],
+      },
+      cp: {
+        data: [
+          { type: 'surface' },
+        ],
+      },
+    },
   },
   mutations: {
     SET_STEP_SIZE(state, step) {
