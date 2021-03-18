@@ -4,11 +4,9 @@
       <b-col md="4">
         <PropellerForm />
       </b-col>
-      <b-col md="4">
-        <PropellerTable />
-      </b-col>
-      <b-col md="4">
+      <b-col md="6">
         <div id="prop" />
+        <PropellerTable />
       </b-col>
     </b-row>
   </b-container>
@@ -34,23 +32,23 @@ export default {
     layout() {
       return {
         title: 'Maximum Efficiency Curves',
-        font: { size: 12 },
+        font: { size: 14 },
+        height: window.innerWidth > 960 ? 500 : window.innerHeight * 0.7,
+        width: window.innerWidth > 960 ? 600 : window.innerWidth * 0.9,
         margin: {
-          l: 50,
+          l: 65,
           r: 0,
           b: 100,
-          t: 50,
+          t: 100,
           pad: 4,
         },
         yaxis: {
-          autorange: true,
           title: {
             text: 'Advance Ratio [J]',
             font: { size: 16 },
           },
         },
         xaxis: {
-          autorange: true,
           title: {
             text: 'Cn',
             font: { size: 16 },
