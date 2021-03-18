@@ -40,6 +40,16 @@
         3. The outcome of the calculations can be viewed in the
         <b>Results</b> tab
       </p>
+      <h5 style="margin-top: 4rem; color: green" v-show="heroku">
+        There is a new, faster version of this app available at
+        <a
+          class="link"
+          href="https://propcalculator.xyz"
+          target="_blank"
+          rel="noopener"
+          >propcalculator.xyz</a
+        >
+      </h5>
     </div>
     <footer>
       <div class="text">Propeller Calculator</div>
@@ -67,6 +77,11 @@
 <script>
 export default {
   name: 'Home',
+  data() {
+    return {
+      heroku: window.location.origin.includes('heroku'),
+    };
+  },
 };
 </script>
 
