@@ -4,7 +4,7 @@
       head-variant="light"
       hover
       bordered
-      sticky-header="850px"
+      sticky-header="835px"
       :items="results.table"
     />
   </div>
