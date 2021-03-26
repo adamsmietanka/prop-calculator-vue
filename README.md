@@ -13,13 +13,11 @@ All key engine data has been grouped in this module.
 
 <img src="https://github.com/adamsmietanka/propeller-mesher/blob/master/docs/images/app_engine.png" align=middle/>
 
-The Engine tab consists of three elements. 
-The first is the master data form that allows you to change engine parameters that directly affect the performance curve displayed on the right.
-This graph is fully interactive - any change will update the power function. 
-This allows the user to quickly prototype and customize your aircraft design for different types of propulsion. 
-
-The last element of the tab is an additional form visible under the chart. 
-These are the two fields that do not affect the graph directly but are necessary for the efficiency calculation.
+The Engine tab consists of two elements. 
+The first is the data form that allows you to change engine parameters that shape the performance curve displayed on the right.
+There are the two fields that do not affect the power function directly but are necessary for the efficiency calculation.
+The graph is fully interactive - any change in the remaining fields will update the performance curve. 
+This allows the user to quickly prototype and customize the aircraft for different types of propulsion. 
 
 ### Optimizing the propeller
 The next tab groups data about the aircraft propeller. 
