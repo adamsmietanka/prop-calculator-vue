@@ -12,7 +12,7 @@
       ref="input"
     >
       <b-input-group :append="unit" v-show="toggleInput === 'Optimized'">
-        <b-form-input disabled type="number" v-model="model" />
+        <b-form-input disabled type="number" :value="model" />
       </b-input-group>
       <b-form-invalid-feedback id="error">{{
         errors[0]
@@ -41,10 +41,10 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState } from "vuex";
 
 export default {
-  name: 'ToggleableInput',
+  name: "ToggleableInput",
   props: {
     name: {
       required: true,
@@ -79,8 +79,8 @@ export default {
         return this.toggler;
       },
       set(v) {
-        this.$store.dispatch('setDiameterType', v);
-        if (v === 'Manual') {
+        this.$store.dispatch("setDiameterType", v);
+        if (v === "Manual") {
           this.value = this.model;
         }
       },

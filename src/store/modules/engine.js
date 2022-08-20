@@ -1,6 +1,6 @@
-import turbocharger from './engine/turbo';
-import supercharger from './engine/supercharger';
-import { prepareX, roundPower } from './engine/helpers';
+import turbocharger from "./engine/turbo";
+import supercharger from "./engine/supercharger";
+import { prepareX, roundPower } from "./engine/helpers";
 
 export default {
   modules: {
@@ -11,7 +11,7 @@ export default {
     SLPower: 800,
     k: 0.1,
     maxAltitude: 10,
-    type: 'Piston',
+    type: "Piston",
     ratio: 0.4,
     revs: 3000,
     data: {
@@ -44,35 +44,35 @@ export default {
   },
   actions: {
     setSLPower({ commit, dispatch }, power) {
-      commit('SET_SL_POWER', parseFloat(power));
-      dispatch('updateStage');
+      commit("SET_SL_POWER", parseFloat(power));
+      dispatch("updateStage");
     },
     setK({ commit, dispatch }, k) {
-      commit('SET_K', parseFloat(k));
-      dispatch('updateStage');
+      commit("SET_K", parseFloat(k));
+      dispatch("updateStage");
     },
     setMaxAlt({ commit }, altitude) {
-      commit('SET_MAX_ALT', parseFloat(altitude));
+      commit("SET_MAX_ALT", parseFloat(altitude));
     },
     setEngineType({ commit, dispatch }, type) {
-      commit('SET_ENGINE_TYPE', type);
-      dispatch('updateData');
+      commit("SET_ENGINE_TYPE", type);
+      dispatch("updateData");
     },
     setRatio({ commit }, ratio) {
-      commit('SET_RATIO', parseFloat(ratio));
+      commit("SET_RATIO", parseFloat(ratio));
     },
     setRevs({ commit }, revs) {
-      commit('SET_REVS', parseFloat(revs));
+      commit("SET_REVS", parseFloat(revs));
     },
     updateData({ state, commit }) {
       const x = prepareX(state);
       const y = x.map((i) => roundPower(state, i));
-      commit('SET_DATA', { x, y });
+      commit("SET_DATA", { x, y });
     },
   },
   getters: {
     maxAltUnits(state) {
-      return state.maxAltitude.toString().concat(' km');
+      return state.maxAltitude.toString().concat(" km");
     },
     k(state) {
       return state.k.toFixed(2);

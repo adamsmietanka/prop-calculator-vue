@@ -1,21 +1,30 @@
 <template>
   <b-form-group :label="name" :label-cols="cols" :label-size="size">
-    <ValidationProvider :name="name" :rules="rules" v-slot="{ errors }" ref="input">
+    <ValidationProvider
+      :name="name"
+      :rules="rules"
+      v-slot="{ errors }"
+      ref="input"
+    >
       <b-input-group :size="size" :append="unit">
-        <b-form-input type="number"
-                      :step="stepSize"
-                      :size="size"
-                      v-model="value"
-                      aria-describedby="error"/>
+        <b-form-input
+          type="number"
+          :step="stepSize"
+          :size="size"
+          v-model="value"
+          aria-describedby="error"
+        />
       </b-input-group>
-      <b-form-invalid-feedback id="error">{{ errors[0] }}</b-form-invalid-feedback>
+      <b-form-invalid-feedback id="error">{{
+        errors[0]
+      }}</b-form-invalid-feedback>
     </ValidationProvider>
   </b-form-group>
 </template>
 
 <script>
 export default {
-  name: 'NumberInput',
+  name: "NumberInput",
   props: {
     name: {
       required: true,
@@ -38,7 +47,7 @@ export default {
     },
     size: {
       required: false,
-      default: () => 'md',
+      default: () => "md",
     },
     cols: {
       required: false,
@@ -57,12 +66,11 @@ export default {
   },
   watch: {
     value(val) {
-      this.$refs.input.validate()
-        .then((res) => {
-          if (res.valid) {
-            this.setter(val);
-          }
-        });
+      this.$refs.input.validate().then((res) => {
+        if (res.valid) {
+          this.setter(val);
+        }
+      });
     },
   },
 };

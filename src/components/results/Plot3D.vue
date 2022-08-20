@@ -3,12 +3,12 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import Plotly from 'plotly.js-gl3d-dist-min';
+import { mapState } from "vuex";
+import Plotly from "plotly.js-gl3d-dist-min";
 
 export default {
-  name: 'Plot3D',
-  props: ['id'],
+  name: "Plot3D",
+  props: ["id"],
   computed: {
     ...mapState({ results: (state) => state.results }),
     data() {
@@ -17,9 +17,9 @@ export default {
     options() {
       return {
         responsive: true,
-        modeBarButtons: [['toImage']],
+        modeBarButtons: [["toImage"]],
         toImageButtonOptions: {
-          format: 'png',
+          format: "png",
           filename: `${this.id}_chart`,
         },
       };
@@ -59,13 +59,13 @@ export default {
             },
           },
           xaxis: {
-            title: 'J',
+            title: "J",
           },
           yaxis: {
-            title: 'Angle',
+            title: "Angle",
           },
           zaxis: {
-            title: this.id === 'cp' ? 'Cp' : 'Eff',
+            title: this.id === "cp" ? "Cp" : "Eff",
           },
         },
       },

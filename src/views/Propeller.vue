@@ -13,13 +13,13 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import Plotly from 'plotly.js-gl3d-dist-min';
-import PropellerForm from '../components/prop/PropellerForm.vue';
-import PropellerTable from '../components/prop/PropellerTable.vue';
+import { mapState } from "vuex";
+import Plotly from "plotly.js-gl3d-dist-min";
+import PropellerForm from "../components/prop/PropellerForm.vue";
+import PropellerTable from "../components/prop/PropellerTable.vue";
 
 export default {
-  name: 'Propeller',
+  name: "Propeller",
   components: {
     PropellerForm,
     PropellerTable,
@@ -31,7 +31,7 @@ export default {
     },
     layout() {
       return {
-        title: 'Maximum Efficiency Curves',
+        title: "Maximum Efficiency Curves",
         font: { size: 14 },
         height: window.innerWidth > 960 ? 500 : window.innerHeight * 0.7,
         width: window.innerWidth > 960 ? 600 : window.innerWidth * 0.9,
@@ -44,13 +44,13 @@ export default {
         },
         yaxis: {
           title: {
-            text: 'Advance Ratio [J]',
+            text: "Advance Ratio [J]",
             font: { size: 16 },
           },
         },
         xaxis: {
           title: {
-            text: 'Cn',
+            text: "Cn",
             font: { size: 16 },
           },
         },
@@ -61,17 +61,17 @@ export default {
       return {
         scrollZoom: false,
         responsive: true,
-        modeBarButtons: [['toImage']],
+        modeBarButtons: [["toImage"]],
         displayModeBar: false,
       };
     },
   },
   mounted() {
-    Plotly.plot('prop', this.data, this.layout, this.options);
+    Plotly.plot("prop", this.data, this.layout, this.options);
   },
   watch: {
     data() {
-      Plotly.react('prop', this.data, this.layout, this.options);
+      Plotly.react("prop", this.data, this.layout, this.options);
     },
   },
 };

@@ -1,37 +1,37 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
-import Home from '../views/Home.vue';
+import Vue from "vue";
+import VueRouter from "vue-router";
+import Home from "../views/Home.vue";
 
 Vue.use(VueRouter);
-const Engine = () => import('../views/Engine.vue')
-const Propeller = () => import('../views/Propeller.vue')
-const Results = () => import('../views/Results.vue')
+const Engine = () => import("../views/Engine.vue");
+const Propeller = () => import("../views/Propeller.vue");
+const Results = () => import("../views/Results.vue");
 
 const routes = [
   {
-    path: '/',
-    name: 'Home',
+    path: "/",
+    name: "Home",
     component: Home,
   },
   {
-    path: '/engine',
-    name: 'Engine',
+    path: "/engine",
+    name: "Engine",
     component: Engine,
   },
   {
-    path: '/propeller',
-    name: 'Propeller',
+    path: "/propeller",
+    name: "Propeller",
     component: Propeller,
   },
   {
-    path: '/results',
-    name: 'Results',
+    path: "/results",
+    name: "Results",
     component: Results,
   },
 ];
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: "history",
   base: process.env.BASE_URL,
   routes,
 });

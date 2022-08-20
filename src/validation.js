@@ -1,50 +1,55 @@
 /* eslint-disable camelcase, object-curly-newline */
-import Vue from 'vue';
-import { required, between, min_value, max_value } from 'vee-validate/dist/rules';
-import { ValidationProvider, configure, extend } from 'vee-validate';
+import Vue from "vue";
+import {
+  required,
+  between,
+  min_value,
+  max_value,
+} from "vee-validate/dist/rules";
+import { ValidationProvider, configure, extend } from "vee-validate";
 
 const config = {
   classes: {
-    valid: 'is-valid',
-    invalid: 'is-invalid',
+    valid: "is-valid",
+    invalid: "is-invalid",
   },
   bails: true,
   skipOptional: true,
-  mode: 'aggressive',
+  mode: "aggressive",
   useConstraintAttrs: false,
 };
 
 // Sets the options.
 configure(config);
 
-extend('required', {
+extend("required", {
   ...required,
-  message: '{_field_} can not be empty',
+  message: "{_field_} can not be empty",
 });
 
-extend('between', {
+extend("between", {
   ...between,
-  message: '{_field_} must be between {min} and {max}',
+  message: "{_field_} must be between {min} and {max}",
 });
 
-extend('min_value', {
+extend("min_value", {
   ...min_value,
-  message: '{_field_} must be {min} or more',
+  message: "{_field_} must be {min} or more",
 });
 
-extend('max_value', {
+extend("max_value", {
   ...max_value,
-  message: '{_field_} must be {max} or less',
+  message: "{_field_} must be {max} or less",
 });
 
-extend('tip_speed', {
+extend("tip_speed", {
   ...max_value,
-  message: 'Max Mach number of the tip for this type of propeller is {max}',
+  message: "Max Mach number of the tip for this type of propeller is {max}",
 });
 
-extend('prop_angle', {
+extend("prop_angle", {
   ...min_value,
-  message: 'This angle is not suitable for this engine and propeller',
+  message: "This angle is not suitable for this engine and propeller",
 });
 
-Vue.component('ValidationProvider', ValidationProvider);
+Vue.component("ValidationProvider", ValidationProvider);

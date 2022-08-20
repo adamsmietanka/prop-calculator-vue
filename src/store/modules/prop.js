@@ -1,5 +1,5 @@
-import axios from 'axios';
-import { roundPower } from './engine/helpers';
+import axios from "axios";
+import { roundPower } from "./engine/helpers";
 
 export default {
   state: {
@@ -7,19 +7,17 @@ export default {
       maxSpeed: 150,
       cruiseAltitude: 3,
       cruisePower: 800,
-      diameterType: 'Optimized',
+      diameterType: "Optimized",
       diameter: 3.902,
       mach: 1,
       numberOfBlades: 3,
-      bladePitch: 'Variable',
+      bladePitch: "Variable",
       angle: 30,
-      bladeMaterial: 'Metal',
+      bladeMaterial: "Metal",
     },
     table: [],
     chart: {
-      data: [
-        { type: 'surface' },
-      ],
+      data: [{ type: "surface" }],
     },
   },
   mutations: {
@@ -62,61 +60,72 @@ export default {
   },
   actions: {
     setMaxSpeed({ commit }, speed) {
-      commit('SET_MAX_SPEED', parseFloat(speed));
+      commit("SET_MAX_SPEED", parseFloat(speed));
     },
     setCruiseAltitude({ commit, dispatch }, altitude) {
-      commit('SET_CRUISE_ALTITUDE', parseFloat(altitude));
-      dispatch('setCruisePower', altitude);
+      commit("SET_CRUISE_ALTITUDE", parseFloat(altitude));
+      dispatch("setCruisePower", altitude);
     },
     setCruisePower({ commit, rootState }, altitude) {
-      commit('SET_CRUISE_POWER', roundPower(rootState.engine, parseFloat(altitude)));
+      commit(
+        "SET_CRUISE_POWER",
+        roundPower(rootState.engine, parseFloat(altitude))
+      );
     },
     setDiameterType({ commit, dispatch, state }, diameter) {
-      commit('SET_DIAMETER_TYPE', diameter);
-      if (diameter === 'Optimized') {
-        dispatch('updatePropeller', state.table);
+      commit("SET_DIAMETER_TYPE", diameter);
+      if (diameter === "Optimized") {
+        dispatch("updatePropeller", state.table);
       }
     },
     setDiameter({ commit }, diameter) {
-      commit('SET_DIAMETER', parseFloat(diameter));
+      commit("SET_DIAMETER", parseFloat(diameter));
     },
     setTipMach({ commit }, number) {
-      commit('SET_TIP_MACH', parseFloat(number));
+      commit("SET_TIP_MACH", parseFloat(number));
     },
     setNumberOfBlades({ commit, dispatch, state }, val) {
-      commit('SET_NUMBER_OF_BLADES', parseFloat(val));
-      dispatch('updatePropeller', state.table);
+      commit("SET_NUMBER_OF_BLADES", parseFloat(val));
+      dispatch("updatePropeller", state.table);
     },
     setBladePitch({ commit }, pitch) {
-      commit('SET_BLADE_PITCH', pitch);
+      commit("SET_BLADE_PITCH", pitch);
     },
     setAngle({ commit }, angle) {
-      commit('SET_ANGLE', parseFloat(angle));
+      commit("SET_ANGLE", parseFloat(angle));
     },
     setBladeMaterial({ commit }, material) {
-      commit('SET_BLADE_MATERIAL', material);
+      commit("SET_BLADE_MATERIAL", material);
     },
     async postPropData({ dispatch }, params) {
-      axios.get('https://1uvcjdfuz3.execute-api.eu-central-1.amazonaws.com/dev/diameter', { params })
-      .then((res) => {
-        let data = JSON.stringify(res.data, (_key, val) => val.toFixed ? Number(val.toFixed(3)) : val);
-        data = JSON.parse(data)
-        dispatch('setPropTable', data.table);
-        dispatch('setPropChart', data.chart);
-        dispatch('updatePropeller', data.table);
-        dispatch('setDiameterType', 'Optimized');
-      });
+      axios
+        .get(
+          "https://1uvcjdfuz3.execute-api.eu-central-1.amazonaws.com/dev/diameter",
+          { params }
+        )
+        .then((res) => {
+          let data = JSON.stringify(res.data, (_key, val) =>
+            val.toFixed ? Number(val.toFixed(3)) : val
+          );
+          data = JSON.parse(data);
+          dispatch("setPropTable", data.table);
+          dispatch("setPropChart", data.chart);
+          dispatch("updatePropeller", data.table);
+          dispatch("setDiameterType", "Optimized");
+        });
     },
     updatePropeller({ dispatch, state }, table) {
-      const row = table.find(({ blades }) => blades === state.form.numberOfBlades.toString());
-      dispatch('setDiameter', row.diameter);
-      dispatch('setTipMach', row.mach);
+      const row = table.find(
+        ({ blades }) => blades === state.form.numberOfBlades.toString()
+      );
+      dispatch("setDiameter", row.diameter);
+      dispatch("setTipMach", row.mach);
     },
     setPropTable({ commit }, table) {
-      commit('SET_PROP_TABLE', table);
+      commit("SET_PROP_TABLE", table);
     },
     setPropChart({ commit }, chart) {
-      commit('SET_PROP_CHART', chart);
+      commit("SET_PROP_CHART", chart);
     },
   },
 };

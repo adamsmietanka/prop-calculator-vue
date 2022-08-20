@@ -1,19 +1,24 @@
 <template>
   <b-form-group :label="name">
-    <ValidationProvider :name="name" :rules="rules" v-slot="{ errors }" ref="input">
+    <ValidationProvider
+      :name="name"
+      :rules="rules"
+      v-slot="{ errors }"
+      ref="input"
+    >
       <b-input-group :append="unit">
-        <b-form-input disabled
-                      v-model="model"
-                      type="number" />
+        <b-form-input disabled :value="model" type="number" />
       </b-input-group>
-      <b-form-invalid-feedback id="error">{{ errors[0] }}</b-form-invalid-feedback>
+      <b-form-invalid-feedback id="error">{{
+        errors[0]
+      }}</b-form-invalid-feedback>
     </ValidationProvider>
   </b-form-group>
 </template>
 
 <script>
 export default {
-  name: 'DisabledInput',
+  name: "DisabledInput",
   props: {
     name: {
       required: true,
@@ -23,11 +28,11 @@ export default {
     },
     unit: {
       required: false,
-      default: () => '',
+      default: () => "",
     },
     rules: {
       required: false,
-      default: () => '',
+      default: () => "",
     },
   },
   watch: {

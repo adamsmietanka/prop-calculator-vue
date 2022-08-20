@@ -1,5 +1,5 @@
-import axios from 'axios';
-import { roundPower } from './engine/helpers';
+import axios from "axios";
+import { roundPower } from "./engine/helpers";
 
 export default {
   state: {
@@ -11,14 +11,10 @@ export default {
     table: [],
     charts: {
       eff: {
-        data: [
-          { type: 'surface' },
-        ],
+        data: [{ type: "surface" }],
       },
       cp: {
-        data: [
-          { type: 'surface' },
-        ],
+        data: [{ type: "surface" }],
       },
     },
   },
@@ -41,34 +37,42 @@ export default {
   },
   actions: {
     setStepSize({ commit }, step) {
-      commit('SET_STEP_SIZE', parseFloat(step));
+      commit("SET_STEP_SIZE", parseFloat(step));
     },
     setAltitude({ commit, dispatch }, altitude) {
-      commit('SET_ALTITUDE', parseFloat(altitude));
-      dispatch('setPower', altitude);
+      commit("SET_ALTITUDE", parseFloat(altitude));
+      dispatch("setPower", altitude);
     },
     setPower({ commit, rootState }, altitude) {
-      commit('SET_POWER', roundPower(rootState.engine, parseFloat(altitude)));
+      commit("SET_POWER", roundPower(rootState.engine, parseFloat(altitude)));
     },
     async postData({ dispatch }, params) {
       let request;
-      if (params.pitch === 'Variable') {
-        request = axios.get('https://k2yzx7le7i.execute-api.eu-central-1.amazonaws.com/dev/prop_results_variable', { params })
+      if (params.pitch === "Variable") {
+        request = axios.get(
+          "https://k2yzx7le7i.execute-api.eu-central-1.amazonaws.com/dev/prop_results_variable",
+          { params }
+        );
       } else {
-        request = axios.get('https://0dog08xcmk.execute-api.eu-central-1.amazonaws.com/default/results_fixed', { params })
+        request = axios.get(
+          "https://0dog08xcmk.execute-api.eu-central-1.amazonaws.com/default/results_fixed",
+          { params }
+        );
       }
       request.then((res) => {
-        let data = JSON.stringify(res.data, (_key, val) => val.toFixed ? Number(val.toPrecision(4)) : val);
-        data = JSON.parse(data)
-        dispatch('setTable', data.table);
-        dispatch('setCharts', data.charts);
+        let data = JSON.stringify(res.data, (_key, val) =>
+          val.toFixed ? Number(val.toPrecision(4)) : val
+        );
+        data = JSON.parse(data);
+        dispatch("setTable", data.table);
+        dispatch("setCharts", data.charts);
       });
     },
     setTable({ commit }, table) {
-      commit('SET_TABLE', table);
+      commit("SET_TABLE", table);
     },
     setCharts({ commit }, charts) {
-      commit('SET_CHARTS', charts);
+      commit("SET_CHARTS", charts);
     },
   },
 };

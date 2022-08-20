@@ -16,13 +16,13 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import ResultsForm from '../components/results/ResultsForm.vue';
-import ResultsTable from '../components/results/ResultsTable.vue';
-import Plot3D from '../components/results/Plot3D.vue';
+import { mapState } from "vuex";
+import ResultsForm from "../components/results/ResultsForm.vue";
+import ResultsTable from "../components/results/ResultsTable.vue";
+import Plot3D from "../components/results/Plot3D.vue";
 
 export default {
-  name: 'Results',
+  name: "Results",
   components: {
     ResultsTable,
     ResultsForm,

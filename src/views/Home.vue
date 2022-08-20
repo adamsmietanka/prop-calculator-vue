@@ -76,10 +76,10 @@
 
 <script>
 export default {
-  name: 'Home',
+  name: "Home",
   data() {
     return {
-      heroku: window.location.origin.includes('heroku'),
+      heroku: window.location.origin.includes("heroku"),
     };
   },
 };

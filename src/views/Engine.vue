@@ -2,21 +2,21 @@
   <b-container class="content">
     <b-row>
       <b-col md="8" order-lg="2">
-        <EnginePlot/>
+        <EnginePlot />
       </b-col>
       <b-col md="4" order-lg="1">
-        <EngineForm/>
+        <EngineForm />
       </b-col>
     </b-row>
   </b-container>
 </template>
 
 <script>
-import EngineForm from '../components/engine/EngineForm.vue';
-import EnginePlot from '../components/engine/EnginePlot.vue';
+import EngineForm from "../components/engine/EngineForm.vue";
+import EnginePlot from "../components/engine/EnginePlot.vue";
 
 export default {
-  name: 'Engine',
+  name: "Engine",
   components: {
     EngineForm,
     EnginePlot,
@@ -24,9 +24,9 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style>
 .form-group {
-    margin-bottom: 0.45rem;
+  margin-bottom: 0.45rem;
 }
 
 .card-body {

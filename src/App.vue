@@ -35,10 +35,10 @@
 }
 </style>
 <script>
-import Navigation from './components/layout/Navigation.vue';
+import Navigation from "./components/layout/Navigation.vue";
 
 export default {
-  name: 'app',
+  name: "app",
   components: {
     Navigation,
   },

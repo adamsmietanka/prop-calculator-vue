@@ -1,5 +1,5 @@
-import Vue from 'vue';
-import { curvePower, powerTurbocharged } from './helpers';
+import Vue from "vue";
+import { curvePower, powerTurbocharged } from "./helpers";
 
 export default {
   state: [
@@ -33,20 +33,20 @@ export default {
   },
   actions: {
     addStage({ commit, dispatch }, stage) {
-      commit('ADD_STAGE', stage);
-      dispatch('updateStage');
+      commit("ADD_STAGE", stage);
+      dispatch("updateStage");
     },
     removeStage({ commit, dispatch }) {
-      commit('REMOVE_STAGE');
-      dispatch('updateData');
+      commit("REMOVE_STAGE");
+      dispatch("updateData");
     },
     setStartAlt({ commit, dispatch }, { id, val }) {
-      commit('SET_START_ALT', { id, altitude: parseFloat(val) });
-      dispatch('updateStage');
+      commit("SET_START_ALT", { id, altitude: parseFloat(val) });
+      dispatch("updateStage");
     },
     setEndAlt({ commit, dispatch }, { id, val }) {
-      commit('SET_END_ALT', { id, altitude: parseFloat(val) });
-      dispatch('updateStage');
+      commit("SET_END_ALT", { id, altitude: parseFloat(val) });
+      dispatch("updateStage");
     },
     updateStage({ commit, dispatch, rootState }) {
       for (const [index, stage] of rootState.engine.supercharger.entries()) {
@@ -54,17 +54,22 @@ export default {
         if (index === 1) {
           const { endAlt, endPower } = rootState.engine.supercharger[0];
           const turbo = powerTurbocharged(rootState.engine, stage.startAlt);
-          const compressor = curvePower(endAlt, endPower, stage.startAlt, rootState.engine.k);
+          const compressor = curvePower(
+            endAlt,
+            endPower,
+            stage.startAlt,
+            rootState.engine.k
+          );
           startPower = Math.max(turbo, compressor);
         }
         stage.startPower = startPower;
-        commit('UPDATE_STAGE', { id: index, stage });
+        commit("UPDATE_STAGE", { id: index, stage });
       }
-      dispatch('updateData');
+      dispatch("updateData");
     },
     setEndPower({ commit, dispatch }, { id, val }) {
-      commit('SET_END_POWER', { id, power: parseFloat(val) });
-      dispatch('updateStage');
+      commit("SET_END_POWER", { id, power: parseFloat(val) });
+      dispatch("updateStage");
     },
   },
   getters: {

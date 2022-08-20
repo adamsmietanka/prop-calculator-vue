@@ -11,12 +11,14 @@ function curveAltitude(curveStart, curveStartPower, power, k) {
 }
 
 function linePower(stage, x) {
-  const a = (stage.endPower - stage.startPower) / (stage.endAlt - stage.startAlt);
+  const a =
+    (stage.endPower - stage.startPower) / (stage.endAlt - stage.startAlt);
   return stage.startPower + a * (x - stage.startAlt);
 }
 
 function lineAltitude(stage, power) {
-  const a = (stage.endPower - stage.startPower) / (stage.endAlt - stage.startAlt);
+  const a =
+    (stage.endPower - stage.startPower) / (stage.endAlt - stage.startAlt);
   return (power - stage.startPower) / a + stage.startAlt;
 }
 
@@ -33,7 +35,9 @@ export function prepareX(engine) {
       x.push(lineAltitude(stage, engine.SLPower));
     }
     if (engine.SLPower < stage.endPower) {
-      x.push(curveAltitude(stage.endAlt, stage.endPower, engine.SLPower, engine.k));
+      x.push(
+        curveAltitude(stage.endAlt, stage.endPower, engine.SLPower, engine.k)
+      );
     }
   }
   return x.sort((a, b) => a - b);
@@ -62,13 +66,15 @@ function powerSupercharged(engine, x) {
  */
 export function powerTurbocharged({ turbocharger, SLPower, k }, x) {
   if (turbocharger.enabled) {
-    return x <= turbocharger.altitude ? SLPower : curvePower(turbocharger.altitude, SLPower, x, k);
+    return x <= turbocharger.altitude
+      ? SLPower
+      : curvePower(turbocharger.altitude, SLPower, x, k);
   }
   return 0;
 }
 
 function calculatePower(engine, x) {
-  if (engine.type === 'Piston') {
+  if (engine.type === "Piston") {
     const turbo = powerTurbocharged(engine, x);
     const compressor = powerSupercharged(engine, x);
     return Math.max(turbo, compressor);

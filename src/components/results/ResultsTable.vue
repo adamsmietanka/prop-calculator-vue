@@ -11,10 +11,10 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState } from "vuex";
 
 export default {
-  name: 'ResultsTable',
+  name: "ResultsTable",
   computed: {
     ...mapState({ results: (state) => state.results }),
   },

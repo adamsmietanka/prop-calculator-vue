@@ -1,14 +1,14 @@
 <template>
-<div class="mt-2">
-  <b-table hover bordered head-variant="light" :items="items"></b-table>
-</div>
+  <div class="mt-2">
+    <b-table hover bordered head-variant="light" :items="items"></b-table>
+  </div>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState } from "vuex";
 
 export default {
-  name: 'PropellerTable',
+  name: "PropellerTable",
   computed: {
     ...mapState({
       prop: (state) => state.prop,
@@ -22,6 +22,4 @@ export default {
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

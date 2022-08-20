@@ -1,12 +1,12 @@
 <template>
   <aside :class="{ hidden: !toggled }">
     <div class="toggler">
-        <i
-          class="fas"
-          v-on:click="toggled = !toggled"
-          :class="{ 'fa-bars': !toggled, 'fa-times': toggled }"
-        />
-      </div>
+      <i
+        class="fas"
+        v-on:click="toggled = !toggled"
+        :class="{ 'fa-bars': !toggled, 'fa-times': toggled }"
+      />
+    </div>
     <nav>
       <router-link to="/" @click.native="hideMobileMenu">
         <i class="fas fa-plane" />
@@ -30,7 +30,7 @@
 
 <script>
 export default {
-  name: 'Navigation',
+  name: "Navigation",
   data() {
     return {
       toggled: false,

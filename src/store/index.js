@@ -1,8 +1,8 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
-import engine from './modules/engine';
-import prop from './modules/prop';
-import results from './modules/results';
+import Vue from "vue";
+import Vuex from "vuex";
+import engine from "./modules/engine";
+import prop from "./modules/prop";
+import results from "./modules/results";
 
 Vue.use(Vuex);
 
